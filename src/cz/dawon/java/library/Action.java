@@ -7,19 +7,10 @@ import java.util.Set;
  * Represents Single Action with its Followers and Prerequisities
  * 
  * @author Jakub Zacek
- * @version 1.0
- */
-/**
- * @author Jakub
+ * @version 1.0.1
  *
- * @param <I>
- * @param <D>
- */
-/**
- * @author Jakub
- *
- * @param <I>
- * @param <D>
+ * @param <I> datatype for Action's identifier
+ * @param <D> datatype for Action's data
  */
 public class Action<I, D> {
 
