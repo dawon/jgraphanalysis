@@ -61,12 +61,18 @@ public class SelectFileCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public void onPrevPress() {}
+	public boolean onPrevPress() {
+		return true;
+	}
 
 	@Override
-	public void onNextPress() {}
+	public boolean onNextPress() {
+		return true;
+	}
 
 	@Override
-	public void onCancelPress() {}
+	public boolean onCancelPress() {
+		return true;
+	}
 
 }

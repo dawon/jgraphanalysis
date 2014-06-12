@@ -23,7 +23,7 @@ import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.2.2
+ * @version 1.3.0
  */
 public class MainWindow extends JFrame {
 
@@ -160,7 +160,9 @@ public class MainWindow extends JFrame {
 	 * Called when Next button is pressed
 	 */
 	private void next() {
-		cards[actCard].onNextPress();
+		if (!cards[actCard].onNextPress()) {
+			return;
+		}
 		cards[cards[actCard].getNextCardId()].args(cards[actCard].getReturnArgs());
 		if (cards[actCard].isLast()) {
 			finish();
@@ -173,7 +175,9 @@ public class MainWindow extends JFrame {
 	 * Called when Previous button is pressed
 	 */	
 	private void prev() {
-		cards[actCard].onPrevPress();
+		if (!cards[actCard].onPrevPress()) {
+			return;
+		}
 		if (cards[actCard].isFirst()) {
 			return;
 		}
@@ -185,7 +189,9 @@ public class MainWindow extends JFrame {
 	 * Called when Cancel button is pressed
 	 */	
 	private void cancel() {
-		cards[actCard].onCancelPress();
+		if (!cards[actCard].onCancelPress()) {
+			return;	
+		}
 		this.setVisible(false);
 	}
 	

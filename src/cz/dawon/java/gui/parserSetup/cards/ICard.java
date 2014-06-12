@@ -5,7 +5,7 @@ import java.awt.Container;
 /**
  * Interface representating one "page" in setup wizard
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2
  */
 public interface ICard {
 
@@ -64,18 +64,21 @@ public interface ICard {
 	public void args(Object args);
 	
 	/**
-	 * Called when 'Previous' button is pressed 
+	 * Called when 'Previous' button is pressed
+	 * @return continue action? (prev) 
 	 */
-	public void onPrevPress();
+	public boolean onPrevPress();
 	
 	/**
-	 * Called when 'Next' button is pressed 
+	 * Called when 'Next' button is pressed
+	 * @return continue action? (next) 
 	 */	
-	public void onNextPress();
+	public boolean onNextPress();
 	
 	/**
-	 * Called when 'Cancel' button is pressed 
+	 * Called when 'Cancel' button is pressed
+	 * @return continue action? (cancel) 
 	 */	
-	public void onCancelPress();
+	public boolean onCancelPress();
 	
 }
