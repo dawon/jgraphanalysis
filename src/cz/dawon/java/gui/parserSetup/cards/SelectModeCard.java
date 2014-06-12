@@ -10,9 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 /**
- * First card allowing user to select wether to parse single file or folder with multiple files
+ * First card allowing user to select whether to parse single file or folder with multiple files
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.0.1
  */
 public class SelectModeCard extends JPanel implements ICard {
 
@@ -36,11 +36,10 @@ public class SelectModeCard extends JPanel implements ICard {
 	private void createMainPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		ButtonGroup bg = new ButtonGroup();
-		
 		JRadioButton singleRB = new JRadioButton("Select single file to be parsed");
 		JRadioButton multiRB = new JRadioButton("Select folder with files to be parsed");
 		
+		ButtonGroup bg = new ButtonGroup();
 		bg.add(singleRB);
 		bg.add(multiRB);
 		
