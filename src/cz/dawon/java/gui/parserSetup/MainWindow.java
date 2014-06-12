@@ -159,10 +159,11 @@ public class MainWindow extends JFrame {
 	 */
 	private void next() {
 		cards[actCard].onNextPress();
+		cards[cards[actCard].getNextCardId()].args(cards[actCard].getReturnArgs());
 		if (cards[actCard].isLast()) {
 			finish();
 		}
-		showCard(++actCard);
+		showCard(cards[actCard].getNextCardId());
 	}
 	
 	/**
@@ -173,7 +174,7 @@ public class MainWindow extends JFrame {
 		if (cards[actCard].isFirst()) {
 			return;
 		}
-		showCard(--actCard);
+		showCard(cards[actCard].getPrevCardId());
 	}
 	
 	/**

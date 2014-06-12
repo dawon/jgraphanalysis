@@ -5,7 +5,7 @@ import java.awt.Container;
 /**
  * Interface representating one "page" in setup wizard
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public interface ICard {
 
@@ -38,6 +38,30 @@ public interface ICard {
 	 * @return true when the card is last
 	 */
 	public boolean isLast();
+	
+	/**
+	 * Gets the ID of next card
+	 * @return ID of next card
+	 */
+	public int getNextCardId();
+
+	/**
+	 * Gets the ID of previous card
+	 * @return ID of previous card
+	 */	
+	public int getPrevCardId();
+	
+	/**
+	 * Gets outgoing arguments of this card
+	 * @return arguments
+	 */
+	public Object getReturnArgs();
+	
+	/**
+	 * Input arguments of this card
+	 * @param args input arguments
+	 */
+	public void args(Object args);
 	
 	/**
 	 * Called when 'Previous' button is pressed 
