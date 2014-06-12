@@ -178,5 +178,23 @@ public class Action<I, D> {
 	 */
 	public Set<I> getTightFollowers() {
 		return new HashSet<I>(this.tightFollowers);
-	}			
+	}		
+	
+	@Override
+	public String toString() {
+		String res = "";
+		
+		res += "Action(id="+this.id+") { ";
+		
+		res += "Prerequisities=" + this.prerequisities;
+		
+		res += "; Tight Prerequisities=" + this.tightPrerequisities;
+		
+		res += "; Followers=" + this.followers;
+		
+		res += "; Tight Followers=" + this.tightFollowers;
+		
+		res += "; Data='"+this.data+"'}";
+		return res;
+	}
 }
