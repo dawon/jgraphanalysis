@@ -14,7 +14,7 @@ import cz.dawon.java.library.parsers.IFileParser;
 /**
  * Main Class for the Library
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.0.1
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -31,6 +31,9 @@ public class JGraphAnalysis<I, D> {
 	 */
 	private IFileParser<I, D> parser;
 	
+	/**
+	 * Set of parsed Actions
+	 */
 	private Set<Action<I, D>> actions;
 	
 	
