@@ -3,7 +3,7 @@ package cz.dawon.java.gui.parserSetup.cards;
 /**
  * Allows user to select Attribute or Node representing Prerequisity
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2
  */
 public class SelectPrerequisityCard extends SelectActionIdCard {
 
@@ -17,16 +17,6 @@ public class SelectPrerequisityCard extends SelectActionIdCard {
 	@Override
 	public String getCardTitle() {
 		return "Select Prerequisity Node or Attribute";
-	}
-	
-	@Override
-	public int getPrevCardId() {
-		return 5;
-	}
-	
-	@Override
-	public int getNextCardId() {
-		return 7;
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import cz.dawon.java.library.Action;
 /**
  * Allows user to select Attribute or Node representing {@link Action} Data
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class SelectActionDataCard extends SelectActionIdCard {
 
@@ -19,16 +19,6 @@ public class SelectActionDataCard extends SelectActionIdCard {
 	@Override
 	public String getCardTitle() {
 		return "Select Action Data Node or Attribute";
-	}
-	
-	@Override
-	public int getPrevCardId() {
-		return 4;
-	}
-	
-	@Override
-	public int getNextCardId() {
-		return 6;
 	}
 	
 	@Override

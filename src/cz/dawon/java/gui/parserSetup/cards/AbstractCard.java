@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 /**
  * Abstract implementation for {@link ICard}
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2
  */
 public abstract class AbstractCard extends JPanel implements ICard {
 
@@ -40,10 +40,14 @@ public abstract class AbstractCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public abstract int getNextCardId();
+	public int getNextCardId() {
+		return this.getCardId() + 1;
+	}
 
 	@Override
-	public abstract int getPrevCardId();
+	public int getPrevCardId() {
+		return this.getCardId() - 1;
+	}
 
 	@Override
 	public void args(JGraphAnalysisSettings args) {

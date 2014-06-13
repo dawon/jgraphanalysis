@@ -8,7 +8,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Allows user to select Attribute or Node representing {@link Action} ID
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class SelectActionIdCard extends AbstractSelectNodeCard {
 
@@ -27,16 +27,6 @@ public class SelectActionIdCard extends AbstractSelectNodeCard {
 	@Override
 	public String getCardTitle() {
 		return "Select Action ID Node or Attribute";
-	}
-
-	@Override
-	public int getNextCardId() {
-		return 5;
-	}
-
-	@Override
-	public int getPrevCardId() {
-		return 3;
 	}
 
 	@Override

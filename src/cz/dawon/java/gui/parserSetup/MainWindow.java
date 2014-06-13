@@ -24,6 +24,7 @@ import cz.dawon.java.gui.parserSetup.cards.SelectActionDataCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectActionIdCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFileCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFolderCard;
+import cz.dawon.java.gui.parserSetup.cards.SelectFollowerCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectPrerequisityCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectTightPrerequisityCard;
@@ -31,7 +32,7 @@ import cz.dawon.java.gui.parserSetup.cards.SelectTightPrerequisityCard;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.4.6
+ * @version 1.4.7
  */
 public class MainWindow extends JFrame {
 
@@ -49,7 +50,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * array of all cards
 	 */
-	private ICard[] cards = new ICard[8];
+	private ICard[] cards = new ICard[9];
 	
 	/**
 	 * instance of card layout
@@ -270,6 +271,7 @@ public class MainWindow extends JFrame {
 		cards[5] = new SelectActionDataCard();
 		cards[6] = new SelectPrerequisityCard();
 		cards[7] = new SelectTightPrerequisityCard();
+		cards[8] = new SelectFollowerCard();
 		//TODO
 		
 		for (int i = 0; i < cards.length; i++) {
