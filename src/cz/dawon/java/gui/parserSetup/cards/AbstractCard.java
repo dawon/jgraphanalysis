@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 /**
  * Abstract implementation for {@link ICard}
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public abstract class AbstractCard extends JPanel implements ICard {
 
@@ -64,5 +64,8 @@ public abstract class AbstractCard extends JPanel implements ICard {
 	public boolean onCancelPress() {
 		return true;
 	}
+	
+	@Override
+	public void onCardShow() {}
 
 }

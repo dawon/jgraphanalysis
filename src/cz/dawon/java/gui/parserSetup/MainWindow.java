@@ -25,7 +25,7 @@ import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.4.2
+ * @version 1.4.3
  */
 public class MainWindow extends JFrame {
 
@@ -218,6 +218,8 @@ public class MainWindow extends JFrame {
 		if (card.isLast()) {
 			nextBTN.setText("Finish");
 		}
+		
+		card.onCardShow();
 		
 		cl.show(cardPN, Integer.toString(cardId));
 	}

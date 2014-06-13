@@ -5,7 +5,7 @@ import java.awt.Container;
 /**
  * Interface representating one "page" in setup wizard
  * @author Jakub Zacek
- * @version 1.3
+ * @version 1.4
  */
 public interface ICard {
 
@@ -74,5 +74,10 @@ public interface ICard {
 	 * @return continue action? (cancel) 
 	 */	
 	public boolean onCancelPress();
+	
+	/**
+	 * Called when Card is shown
+	 */
+	public void onCardShow();
 	
 }
