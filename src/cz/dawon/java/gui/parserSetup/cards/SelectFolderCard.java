@@ -1,6 +1,5 @@
 package cz.dawon.java.gui.parserSetup.cards;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -21,7 +20,7 @@ import javax.swing.JTextField;
  * @author Jakub Zacek
  * @version 1.3
  */
-public class SelectFolderCard extends JPanel implements ICard {
+public class SelectFolderCard extends AbstractCard {
 
 	private static final long serialVersionUID = 9215467740745285504L;
 
@@ -34,11 +33,6 @@ public class SelectFolderCard extends JPanel implements ICard {
 	 * {@link JTextField} containing extension
 	 */
 	private JTextField extensionTF;	
-	
-	/**
-	 * {@link JGraphAnalysisSettings} instance
-	 */
-	private JGraphAnalysisSettings settings;	
 	
 	/**
 	 * constructor
@@ -145,22 +139,7 @@ public class SelectFolderCard extends JPanel implements ICard {
 	public String getCardTitle() {
 		return "Select Folder";
 	}
-
-	@Override
-	public Container getCardContent() {
-		return this;
-	}
-
-	@Override
-	public boolean isFirst() {
-		return false;
-	}
-
-	@Override
-	public boolean isLast() {
-		return false;
-	}
-
+	
 	@Override
 	public int getNextCardId() {
 		return 3;
@@ -169,16 +148,6 @@ public class SelectFolderCard extends JPanel implements ICard {
 	@Override
 	public int getPrevCardId() {
 		return 0;
-	}
-
-	@Override
-	public void args(JGraphAnalysisSettings args) {
-		this.settings = args;
-	}
-
-	@Override
-	public boolean onPrevPress() {
-		return true;
 	}
 
 	@Override
@@ -197,10 +166,4 @@ public class SelectFolderCard extends JPanel implements ICard {
 		this.settings.extension = this.extensionTF.getText();
 		return true;
 	}
-
-	@Override
-	public boolean onCancelPress() {
-		return true;
-	}
-
 }

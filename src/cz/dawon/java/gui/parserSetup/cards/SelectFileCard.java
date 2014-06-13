@@ -1,6 +1,5 @@
 package cz.dawon.java.gui.parserSetup.cards;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,7 @@ import javax.swing.JTextField;
  * @author Jakub Zacek
  * @version 1.6
  */
-public class SelectFileCard extends JPanel implements ICard {
+public class SelectFileCard extends AbstractCard {
 
 	private static final long serialVersionUID = -840790898114112531L;
 
@@ -28,11 +27,7 @@ public class SelectFileCard extends JPanel implements ICard {
 	 * {@link JTextField} containing path to selected file
 	 */
 	private JTextField pathTF;
-	
-	/**
-	 * {@link JGraphAnalysisSettings} instance
-	 */
-	private JGraphAnalysisSettings settings;	
+
 	
 	/**
 	 * constructor
@@ -95,21 +90,6 @@ public class SelectFileCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public Container getCardContent() {
-		return this;
-	}
-
-	@Override
-	public boolean isFirst() {
-		return false;
-	}
-
-	@Override
-	public boolean isLast() {
-		return false;
-	}
-
-	@Override
 	public int getNextCardId() {
 		return 3;
 	}
@@ -117,16 +97,6 @@ public class SelectFileCard extends JPanel implements ICard {
 	@Override
 	public int getPrevCardId() {
 		return 0;
-	}
-
-	@Override
-	public void args(JGraphAnalysisSettings args) {
-		this.settings = args;
-	}
-
-	@Override
-	public boolean onPrevPress() {
-		return true;
 	}
 
 	@Override
@@ -142,11 +112,6 @@ public class SelectFileCard extends JPanel implements ICard {
 			return false;			
 		}
 		this.settings.path = f.getAbsolutePath();
-		return true;
-	}
-
-	@Override
-	public boolean onCancelPress() {
 		return true;
 	}
 

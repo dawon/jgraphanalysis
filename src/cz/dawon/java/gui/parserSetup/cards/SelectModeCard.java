@@ -1,12 +1,10 @@
 package cz.dawon.java.gui.parserSetup.cards;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 /**
@@ -14,14 +12,9 @@ import javax.swing.JRadioButton;
  * @author Jakub Zacek
  * @version 1.3.1
  */
-public class SelectModeCard extends JPanel implements ICard {
+public class SelectModeCard extends AbstractCard {
 
 	private static final long serialVersionUID = 6985927522329253517L;
-
-	/**
-	 * {@link JGraphAnalysisSettings} instance
-	 */
-	private JGraphAnalysisSettings settings;
 	
 	/**
 	 * constructor
@@ -74,32 +67,7 @@ public class SelectModeCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public Container getCardContent() {
-		return this;
-	}
-
-	@Override
 	public boolean isFirst() {
-		return true;
-	}
-
-	@Override
-	public boolean isLast() {
-		return false;
-	}
-
-	@Override
-	public boolean onPrevPress() {
-		return true;
-	}
-
-	@Override
-	public boolean onNextPress() {
-		return true;
-	}
-
-	@Override
-	public boolean onCancelPress() {
 		return true;
 	}
 
@@ -112,10 +80,4 @@ public class SelectModeCard extends JPanel implements ICard {
 	public int getPrevCardId() {
 		return -1;
 	}
-
-	@Override
-	public void args(JGraphAnalysisSettings args) {
-		this.settings = args;
-	}
-
 }
