@@ -12,12 +12,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import cz.dawon.java.gui.parserSetup.cards.ICard;
 import cz.dawon.java.gui.parserSetup.cards.JGraphAnalysisSettings;
+import cz.dawon.java.gui.parserSetup.cards.SelectActionCard;
+import cz.dawon.java.gui.parserSetup.cards.SelectActionIdCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFileCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFolderCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
@@ -43,7 +46,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * array of all cards
 	 */
-	private ICard[] cards = new ICard[3];
+	private ICard[] cards = new ICard[5];
 	
 	/**
 	 * instance of card layout
@@ -82,6 +85,12 @@ public class MainWindow extends JFrame {
 	public MainWindow(JGraphAnalysisSetup jgas) {
 		super("JGraphAnalysis");
 		this.jgas = jgas;
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600, 500);
@@ -253,6 +262,8 @@ public class MainWindow extends JFrame {
 		cards[0] = new SelectModeCard();
 		cards[1] = new SelectFileCard();
 		cards[2] = new SelectFolderCard();
+		cards[3] = new SelectActionCard();
+		cards[4] = new SelectActionIdCard();
 		//TODO
 		
 		for (int i = 0; i < cards.length; i++) {

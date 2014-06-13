@@ -23,20 +23,20 @@ import cz.dawon.java.library.Action;
 /**
  * Parser for XML documents. Typed to String ID and String Data
  * @author Jakub Zacek
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class XMLParser implements IFileParser<String, String> {
 
 	/**
 	 * Used to exactly specify Node or it's data in XML document
 	 * @author Jakub Zacek
-	 * @version 1.0
+	 * @version 1.1
 	 */
 	public static class NodeSelector {
 		/**
-		 * Name of the element or null to use actual Node.
+		 * Name of the node or null to use actual Node.
 		 */
-		public String elementName;
+		public String nodeName;
 
 		/**
 		 * Attribute name of desired value. Null when inner value of element is desired
@@ -50,12 +50,19 @@ public class XMLParser implements IFileParser<String, String> {
 
 		/**
 		 * constructor method
+		 */
+		public NodeSelector() {
+
+		}
+		
+		/**
+		 * constructor method
 		 * @param elementName element name
 		 * @param attributeName attribute name
 		 * @param parents dot separated list of parent node names
 		 */
 		public NodeSelector(String elementName, String attributeName, String parents) {
-			this.elementName = elementName;
+			this.nodeName = elementName;
 			this.attributeName = attributeName;
 			this.parents = parents;
 		}
@@ -148,7 +155,7 @@ public class XMLParser implements IFileParser<String, String> {
 	 * @param skip How many times skip desired node. When less than 1, first occurance is taken. 1 - second occurance is taken. 2 third etc.
 	 * @return found Node or null if there is not any other occurance.
 	 */
-	private Node findNode(NodeList nodes, NodeSelector sel, int[] skip) {
+	private static Node findNode(NodeList nodes, NodeSelector sel, int[] skip) {
 		if (sel == null) {
 			return null;
 		}
@@ -157,7 +164,7 @@ public class XMLParser implements IFileParser<String, String> {
 		Node n;
 		if (sel.parents == null || sel.parents.trim().isEmpty()) {
 			while ((n = nodes.item(i)) != null) {
-				if (n.getNodeName().equals(sel.elementName)) {
+				if (n.getNodeName().equals(sel.nodeName)) {
 					if (skip[0] <= 0) {
 						return n;
 					} else {
@@ -179,7 +186,7 @@ public class XMLParser implements IFileParser<String, String> {
 		Node n1 = null;
 		while ((n = nodes.item(i)) != null) {
 			if (n.getNodeName().equals(path[0])) {
-				n1 = findNode(n.getChildNodes(), new NodeSelector(sel.elementName, sel.attributeName, parents), skip);
+				n1 = findNode(n.getChildNodes(), new NodeSelector(sel.nodeName, sel.attributeName, parents), skip);
 				if (n1 != null) {
 					break;
 				}
@@ -196,7 +203,7 @@ public class XMLParser implements IFileParser<String, String> {
 	 * @param skip How many times skip desired node. When less than 1, first occurance is taken. 1 - second occurance is taken. 2 third etc.
 	 * @return found Node or null if there is not any other occurance.
 	 */	
-	public Node findNode(NodeList nodes, NodeSelector sel, int skip) {
+	public static Node findNode(NodeList nodes, NodeSelector sel, int skip) {
 		return findNode(nodes, sel, new int[] {skip});
 	}
 
@@ -207,12 +214,12 @@ public class XMLParser implements IFileParser<String, String> {
 	 * @param skip How many times skip desired node data. When less than 1, first occurance is taken. 1 - second occurance is taken. 2 third etc.
 	 * @return
 	 */
-	public String getNodeData(Node node, NodeSelector sel, int skip) {
+	public static String getNodeData(Node node, NodeSelector sel, int skip) {
 		if (sel == null) {
 			return null;
 		}
 		
-		if (sel.elementName == null) {
+		if (sel.nodeName == null) {
 			if (sel.attributeName == null) {
 				return node.getTextContent();
 			} else {
