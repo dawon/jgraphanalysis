@@ -23,7 +23,7 @@ import cz.dawon.java.library.Action;
 /**
  * Parser for XML documents. Typed to String ID and String Data
  * @author Jakub Zacek
- * @version 1.0.2
+ * @version 1.1
  */
 public class XMLParser implements IFileParser<String, String> {
 
@@ -164,7 +164,6 @@ public class XMLParser implements IFileParser<String, String> {
 		if (sel == null) {
 			return null;
 		}
-		
 		int i = 0;	
 		Node n;
 		if (sel.parents == null || sel.parents.trim().isEmpty()) {
@@ -232,7 +231,14 @@ public class XMLParser implements IFileParser<String, String> {
 			}			
 		}
 		
-		Node n = findNode(node.getChildNodes(), sel, skip);
+		Node n;
+		
+		if (sel.nodeName != null && sel.attributeName != null && sel.nodeName.equals(node.getNodeName())) {
+			n = node;
+		} else {
+			n = findNode(node.getChildNodes(), sel, skip);
+		}
+		
 		
 		if (n == null) {
 			return null;
