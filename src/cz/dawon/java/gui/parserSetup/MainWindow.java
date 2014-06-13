@@ -25,7 +25,7 @@ import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.4.1
+ * @version 1.4.2
  */
 public class MainWindow extends JFrame {
 
@@ -86,6 +86,7 @@ public class MainWindow extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600, 500);
 		this.setLocationRelativeTo(null);
+		this.setResizable(false);
 		
 		this.createMainPanel();
 		cards[actCard].args(settings);

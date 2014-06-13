@@ -9,6 +9,7 @@ import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,7 +19,7 @@ import javax.swing.JTextField;
 /**
  * Allows user to select folder to be looked in
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class SelectFolderCard extends JPanel implements ICard {
 
@@ -61,6 +62,16 @@ public class SelectFolderCard extends JPanel implements ICard {
 		
 		JButton browseBTN = new JButton("Browse...");
 		this.add(browseBTN);
+		
+		JCheckBox recursiveCB = new JCheckBox("Search recursively");
+		this.add(recursiveCB);
+		
+		recursiveCB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				settings.recursive = ((JCheckBox)(e.getSource())).isSelected();
+			}
+		});
 		
 		browseBTN.addActionListener(new ActionListener() {
 			@Override
