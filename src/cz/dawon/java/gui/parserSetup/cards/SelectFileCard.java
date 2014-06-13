@@ -18,13 +18,21 @@ import javax.swing.JTextField;
 /**
  * Allows user to select single file to be parsed
  * @author Jakub Zacek
- * @version 1.5
+ * @version 1.6
  */
 public class SelectFileCard extends JPanel implements ICard {
 
 	private static final long serialVersionUID = -840790898114112531L;
 
+	/**
+	 * {@link JTextField} containing path to selected file
+	 */
 	private JTextField pathTF;
+	
+	/**
+	 * {@link JGraphAnalysisSettings} instance
+	 */
+	private JGraphAnalysisSettings settings;	
 	
 	/**
 	 * constructor
@@ -112,7 +120,9 @@ public class SelectFileCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public void args(JGraphAnalysisSettings args) {}
+	public void args(JGraphAnalysisSettings args) {
+		this.settings = args;
+	}
 
 	@Override
 	public boolean onPrevPress() {
@@ -131,6 +141,7 @@ public class SelectFileCard extends JPanel implements ICard {
 			JOptionPane.showMessageDialog(this, "Selected file does not exists or is a folder!", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;			
 		}
+		this.settings.path = f.getAbsolutePath();
 		return true;
 	}
 
