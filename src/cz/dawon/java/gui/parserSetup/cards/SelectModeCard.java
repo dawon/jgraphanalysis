@@ -12,16 +12,16 @@ import javax.swing.JRadioButton;
 /**
  * First card allowing user to select whether to parse single file or folder with multiple files
  * @author Jakub Zacek
- * @version 1.2.0
+ * @version 1.3.0
  */
 public class SelectModeCard extends JPanel implements ICard {
 
 	private static final long serialVersionUID = 6985927522329253517L;
 
 	/**
-	 * selected mode, 1 - single file, 2 - folder
+	 * {@link JGraphAnalysisSettings} instance
 	 */
-	private int mode = 1;
+	private JGraphAnalysisSettings settings;
 	
 	/**
 	 * constructor
@@ -51,14 +51,14 @@ public class SelectModeCard extends JPanel implements ICard {
 		singleRB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mode = 1;
+				settings.singleFile = true;
 			}
 		});
 		
 		multiRB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mode = 2;
+				settings.singleFile = true;
 			}
 		});
 	}
@@ -105,7 +105,7 @@ public class SelectModeCard extends JPanel implements ICard {
 
 	@Override
 	public int getNextCardId() {
-		return this.mode;
+		return this.settings.singleFile ? 1 : 2;
 	}
 
 	@Override
@@ -114,6 +114,8 @@ public class SelectModeCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public void args(JGraphAnalysisSettings args) {}
+	public void args(JGraphAnalysisSettings args) {
+		this.settings = args;
+	}
 
 }
