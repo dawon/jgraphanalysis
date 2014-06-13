@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 /**
  * Allows user to select folder to be looked in
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.3
  */
 public class SelectFolderCard extends JPanel implements ICard {
 
@@ -29,6 +29,11 @@ public class SelectFolderCard extends JPanel implements ICard {
 	 * {@link JTextField} containing path to selected folder
 	 */
 	private JTextField pathTF;
+
+	/**
+	 * {@link JTextField} containing extension
+	 */
+	private JTextField extensionTF;	
 	
 	/**
 	 * {@link JGraphAnalysisSettings} instance
@@ -49,6 +54,19 @@ public class SelectFolderCard extends JPanel implements ICard {
 	private void createMainPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
+		this.createPathJTextField();		
+		
+		this.createCheckBox();
+		
+		this.createExtensionTextField();
+			
+	}
+
+
+	/**
+	 * Creates {@link JTextField} and {@link JButton} for path selection
+	 */
+	private void createPathJTextField() {
 		JPanel innerPN = new JPanel();
 		innerPN.setLayout(new BoxLayout(innerPN, BoxLayout.LINE_AXIS));
 		
@@ -61,8 +79,39 @@ public class SelectFolderCard extends JPanel implements ICard {
 		this.add(innerPN);
 		
 		JButton browseBTN = new JButton("Browse...");
-		this.add(browseBTN);
+		this.add(browseBTN);		
 		
+		browseBTN.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				browse();
+			}
+		});
+	}
+
+
+	/**
+	 * Creates {@link JTextField} for extension selection
+	 */
+	private void createExtensionTextField() {
+		JPanel innerPN = new JPanel();
+		innerPN.setLayout(new BoxLayout(innerPN, BoxLayout.LINE_AXIS));
+		
+		innerPN.add(new JLabel("Extension of files to be parsed (ie. xml): "));		
+		
+		extensionTF = new JTextField("");
+		extensionTF.setPreferredSize(new Dimension(100, 22));
+		innerPN.add(extensionTF);	
+		
+		innerPN.add(new JLabel(" (leave blank for all files)"));		
+
+		this.add(innerPN);
+	}
+	
+	/**
+	 * Creates {@link JCheckBox} for recursive selection
+	 */
+	private void createCheckBox() {
 		JCheckBox recursiveCB = new JCheckBox("Search recursively");
 		this.add(recursiveCB);
 		
@@ -72,14 +121,6 @@ public class SelectFolderCard extends JPanel implements ICard {
 				settings.recursive = ((JCheckBox)(e.getSource())).isSelected();
 			}
 		});
-		
-		browseBTN.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				browse();
-			}
-		});
-				
 	}
 	
 	/**
@@ -153,6 +194,7 @@ public class SelectFolderCard extends JPanel implements ICard {
 			return false;			
 		}
 		this.settings.path = f.getAbsolutePath();
+		this.settings.extension = this.extensionTF.getText();
 		return true;
 	}
 
