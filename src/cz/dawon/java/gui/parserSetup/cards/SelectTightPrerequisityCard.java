@@ -1,32 +1,32 @@
 package cz.dawon.java.gui.parserSetup.cards;
 
 /**
- * Allows user to select Attribute or Node representing Prerequisity
+ * Allows user to select Attribute or Node representing Tight Prerequisity
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.0
  */
-public class SelectPrerequisityCard extends SelectActionIdCard {
+public class SelectTightPrerequisityCard extends SelectActionIdCard {
 
-	private static final long serialVersionUID = -8685233344290195935L;
-	
+	private static final long serialVersionUID = 9124530787660430994L;
+
 	@Override
 	public int getCardId() {
-		return 6;
+		return 7;
 	}
 	
 	@Override
 	public String getCardTitle() {
-		return "Select Prerequisity Node or Attribute";
+		return "Select Tight Prerequisity Node or Attribute";
 	}
 	
 	@Override
 	public int getPrevCardId() {
-		return 5;
+		return 6;
 	}
 	
 	@Override
 	public int getNextCardId() {
-		return 7;
+		return 8;
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class SelectPrerequisityCard extends SelectActionIdCard {
 		if (!super.onNextPress()) {
 			return false;
 		}
-		settings.parser.setPrerequisitySelector(selected);
+		settings.parser.setTightPrerequisitySelector(selected);
 		return true;
-	}	
+	}		
 }
