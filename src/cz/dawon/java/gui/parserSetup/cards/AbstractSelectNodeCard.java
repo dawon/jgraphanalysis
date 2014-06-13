@@ -31,7 +31,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Abstract card for selecting nodes
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public abstract class AbstractSelectNodeCard extends AbstractCard {
 
@@ -269,6 +269,9 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 		filesCB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (filesCB.getSelectedIndex() == -1) {
+					return;
+				}
 				loadFile();
 			}
 		});
