@@ -5,7 +5,7 @@ import cz.dawon.java.library.Action;
 /**
  * Allows user to select Attribute or Node representing {@link Action} Data
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2
  */
 public class SelectActionDataCard extends SelectActionIdCard {
 
@@ -29,4 +29,8 @@ public class SelectActionDataCard extends SelectActionIdCard {
 		settings.parser.setActionDataSelector(selected);
 		return true;
 	}	
+	
+	protected boolean checkIdSelected() {
+		return true;		
+	}
 }

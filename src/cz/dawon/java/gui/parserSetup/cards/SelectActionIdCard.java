@@ -8,7 +8,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Allows user to select Attribute or Node representing {@link Action} ID
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2.2
  */
 public class SelectActionIdCard extends AbstractSelectNodeCard {
 
@@ -33,17 +33,25 @@ public class SelectActionIdCard extends AbstractSelectNodeCard {
 	protected NodeSelector getRootNode() {
 		return settings.parser.getActionSelector();
 	}
-	
-	@Override
-	public boolean onNextPress() {
-		if (!super.onNextPress()) {
-			return false;
-		}
+
+	/**
+	 * Checks whether Id node or attribute is selected
+	 * @return true when is selected and can continue
+	 */
+	protected boolean checkIdSelected() {
 		if (selected == null) {
 			JOptionPane.showMessageDialog(this, "You must select some Node or Attribute representing Action ID!", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		settings.parser.setActionIdSelector(selected);
+		settings.parser.setActionIdSelector(selected);		
+		return true;
+	}
+	
+	@Override
+	public boolean onNextPress() {
+		if (!super.onNextPress() || !checkIdSelected()) {
+			return false;
+		}
 		return true;
 	}	
 	

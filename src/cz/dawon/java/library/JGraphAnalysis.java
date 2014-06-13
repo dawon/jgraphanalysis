@@ -14,7 +14,7 @@ import cz.dawon.java.library.parsers.IFileParser;
 /**
  * Main Class for the Library
  * @author Jakub Zacek
- * @version 1.0.1
+ * @version 1.0.3
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -30,7 +30,7 @@ public class JGraphAnalysis<I, D> {
 	 * file parser instance
 	 */
 	private IFileParser<I, D> parser;
-	
+
 	/**
 	 * Set of parsed Actions
 	 */
@@ -45,14 +45,21 @@ public class JGraphAnalysis<I, D> {
 	}
 	
 	/**
-	 * sets the parser instance for this class
-	 * @param parser parser instance
+	 * sets the {@link IFileParser} for this class
+	 * @param parser {@link IFileParser}
 	 */
 	public void setParser(IFileParser<I, D> parser) {
 		this.parser = parser;
 	}
 	
-
+	/**
+	 * gets the {@link IFileParser} instance for this class
+	 * @return {@link IFileParser}
+	 */
+	public IFileParser<I, D> getParser() {
+		return parser;
+	}
+	
 	/**
 	 * Gets extension of a file
 	 * @param f file
@@ -113,6 +120,14 @@ public class JGraphAnalysis<I, D> {
 	        }
 	    }		
 	    LOGGER.logp(Level.INFO, "JGraphAnalysis", "parseFolder", "Finished folder '"+path+"'...");
+	}
+
+	/**
+	 * Gets Set of {@link Action}s
+	 * @return Set of {@link Action}s
+	 */
+	public Set<Action<I, D>> getActions() {
+		return actions;
 	}
 	
 	

@@ -15,7 +15,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Modified {@link DefaultMutableTreeNode} to be used with {@link Node}
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class XMLMutableTreeNode extends DefaultMutableTreeNode {
 
@@ -81,9 +81,8 @@ public class XMLMutableTreeNode extends DefaultMutableTreeNode {
 	 * Generates {@link NodeSelector} for this node
 	 * @return {@link NodeSelector}
 	 */
-	public NodeSelector getNodeSelector() {
+	public NodeSelector getNodeSelector(boolean skipRoot) {
 		NodeSelector ns = new NodeSelector();
-		//Node n = node;
 		XMLMutableTreeNode n = this;
 		if (node == null) {
 			return null;
@@ -108,7 +107,14 @@ public class XMLMutableTreeNode extends DefaultMutableTreeNode {
 			ns.parents = null;
 		} else {
 			Collections.reverse(parents);
-			ns.parents = XMLParser.implode(".", Arrays.copyOf(parents.toArray(), parents.toArray().length, String[].class));
+			if (skipRoot) {
+				parents.remove(0);
+			}			
+			if (parents.size() == 0) {
+				ns.parents = null;
+			} else {
+				ns.parents = XMLParser.implode(".", Arrays.copyOf(parents.toArray(), parents.toArray().length, String[].class));
+			}
 		}
 		return ns;
 	}

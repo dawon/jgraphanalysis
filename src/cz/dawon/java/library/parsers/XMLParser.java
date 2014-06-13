@@ -30,7 +30,7 @@ public class XMLParser implements IFileParser<String, String> {
 	/**
 	 * Used to exactly specify Node or it's data in XML document
 	 * @author Jakub Zacek
-	 * @version 1.1
+	 * @version 1.2
 	 */
 	public static class NodeSelector {
 		/**
@@ -65,6 +65,11 @@ public class XMLParser implements IFileParser<String, String> {
 			this.nodeName = elementName;
 			this.attributeName = attributeName;
 			this.parents = parents;
+		}
+		
+		@Override
+		public String toString() {
+			return parents + "." + nodeName + " ["+attributeName+"]";
 		}
 
 

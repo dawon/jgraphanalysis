@@ -31,7 +31,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Abstract card for selecting nodes
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.2.1
  */
 public abstract class AbstractSelectNodeCard extends AbstractCard {
 
@@ -295,7 +295,7 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 				XMLMutableTreeNode sel = (XMLMutableTreeNode)nodesT.getLastSelectedPathComponent();
 				NodeSelector ns = null;
 				if (sel != null) {
-					ns = sel.getNodeSelector();
+					ns = sel.getNodeSelector(getRootNode() != null);
 				}
 				updateDetails(ns);
 			}
