@@ -23,7 +23,7 @@ import cz.dawon.java.library.Action;
 /**
  * Parser for XML documents. Typed to String ID and String Data
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.0.1
  */
 public class XMLParser implements IFileParser<String, String> {
 
@@ -125,7 +125,7 @@ public class XMLParser implements IFileParser<String, String> {
 	 * @throws IOException occurs when there is any problem while reading the file
 	 * @throws ParseException occurs when there is any problem while parsing the file
 	 */
-	public Document loadXMLFile(String fileName) throws IOException, ParseException {
+	public static Document loadXMLFile(String fileName) throws IOException, ParseException {
 		Document doc = null;
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
