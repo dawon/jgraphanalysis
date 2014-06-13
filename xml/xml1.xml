@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<action id="10">
+		<id>10</id>
+		<pre pre="20">20</pre>
+		<fol>2</fol>
+		<data>Nile 1</data>
+	</action>
+	<action id="20">
+		<id>20</id>
+		<tpre>3</tpre>
+		<tfol>2</tfol>
+		<data>Moldau 2</data>
+	</action>
+	<action id="30">
+		<id>30</id>
+		<data>Mississippi 3</data>
+	</action>
+	<action id="40">
+		<id>40</id>
+		<pre pre="30">30</pre>
+		<pre pre="20">20</pre>    
+		<data>Labe 4</data>
+	</action>    
+</actions>

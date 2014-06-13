@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<action id="0">
+		<id>0</id>
+		<pre pre="1">1</pre>
+		<fol>2</fol>
+		<data>Nile</data>
+	</action>
+	<action id="1">
+		<id>1</id>
+		<tpre>3</tpre>
+		<tfol>2</tfol>
+		<data>Moldau</data>
+	</action>
+	<action id="2">
+		<id>2</id>
+		<data>Mississippi</data>
+	</action>
+	<action id="3">
+		<id>3</id>
+		<pre pre="3">3</pre>
+		<pre pre="5">5</pre>    
+		<data>Labe</data>
+	</action>
+	<action id="4">
+		<id>4</id>
+		<data>Colorado</data>
+	</action>     
+	<action id="5">
+		<id>5</id>
+		<data>Berounka</data>
+	</action>    
+</actions>
