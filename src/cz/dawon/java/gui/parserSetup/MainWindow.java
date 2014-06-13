@@ -19,12 +19,13 @@ import javax.swing.border.TitledBorder;
 import cz.dawon.java.gui.parserSetup.cards.ICard;
 import cz.dawon.java.gui.parserSetup.cards.JGraphAnalysisSettings;
 import cz.dawon.java.gui.parserSetup.cards.SelectFileCard;
+import cz.dawon.java.gui.parserSetup.cards.SelectFolderCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.4.0
+ * @version 1.4.1
  */
 public class MainWindow extends JFrame {
 
@@ -42,7 +43,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * array of all cards
 	 */
-	private ICard[] cards = new ICard[2];
+	private ICard[] cards = new ICard[3];
 	
 	/**
 	 * instance of card layout
@@ -87,6 +88,7 @@ public class MainWindow extends JFrame {
 		this.setLocationRelativeTo(null);
 		
 		this.createMainPanel();
+		cards[actCard].args(settings);
 		this.showCard(this.actCard);
 	}
 	
@@ -247,6 +249,7 @@ public class MainWindow extends JFrame {
 	private void addCards() {
 		cards[0] = new SelectModeCard();
 		cards[1] = new SelectFileCard();
+		cards[2] = new SelectFolderCard();
 		//TODO
 		
 		for (int i = 0; i < cards.length; i++) {
