@@ -27,12 +27,14 @@ import cz.dawon.java.gui.parserSetup.cards.SelectFolderCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFollowerCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectPrerequisityCard;
+import cz.dawon.java.gui.parserSetup.cards.SelectTightFollowerCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectTightPrerequisityCard;
+import cz.dawon.java.library.JGraphAnalysis;
 
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.4.7
+ * @version 1.5
  */
 public class MainWindow extends JFrame {
 
@@ -50,7 +52,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * array of all cards
 	 */
-	private ICard[] cards = new ICard[9];
+	private ICard[] cards = new ICard[10];
 	
 	/**
 	 * instance of card layout
@@ -172,7 +174,17 @@ public class MainWindow extends JFrame {
 	 * Called when Next is pressed on last card
 	 */
 	private void finish() {
-		jgas.setUpDone(null); //TODO
+		JGraphAnalysis<String, String> jga = new JGraphAnalysis<String, String>();
+		jga.setParser(settings.parser);
+		
+		if (settings.singleFile) {
+			jga.parse(settings.path);
+		} else {
+			jga.parseFolder(settings.path, settings.recursive, settings.extension);
+		}
+		
+		jgas.setUpDone(jga);
+		this.close();
 	}
 	
 	/**
@@ -182,10 +194,11 @@ public class MainWindow extends JFrame {
 		if (!cards[actCard].onNextPress()) {
 			return;
 		}
-		cards[cards[actCard].getNextCardId()].args(settings);
 		if (cards[actCard].isLast()) {
 			finish();
+			return;
 		}
+		cards[cards[actCard].getNextCardId()].args(settings);		
 		this.actCard = cards[actCard].getNextCardId();
 		showCard(this.actCard);
 	}
@@ -211,7 +224,12 @@ public class MainWindow extends JFrame {
 		if (!cards[actCard].onCancelPress()) {
 			return;	
 		}
+		this.close();
+	}
+	
+	private void close() {
 		this.setVisible(false);
+		this.dispose();
 	}
 	
 	
@@ -272,7 +290,7 @@ public class MainWindow extends JFrame {
 		cards[6] = new SelectPrerequisityCard();
 		cards[7] = new SelectTightPrerequisityCard();
 		cards[8] = new SelectFollowerCard();
-		//TODO
+		cards[9] = new SelectTightFollowerCard();
 		
 		for (int i = 0; i < cards.length; i++) {
 			cardPN.add(createCard(cards[i]), Integer.toString(i));
