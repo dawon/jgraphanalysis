@@ -12,7 +12,7 @@ import javax.swing.JRadioButton;
 /**
  * First card allowing user to select whether to parse single file or folder with multiple files
  * @author Jakub Zacek
- * @version 1.1.0
+ * @version 1.2.0
  */
 public class SelectModeCard extends JPanel implements ICard {
 
@@ -114,11 +114,6 @@ public class SelectModeCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public Object getReturnArgs() {
-		return null;
-	}
-
-	@Override
-	public void args(Object args) {}
+	public void args(JGraphAnalysisSettings args) {}
 
 }

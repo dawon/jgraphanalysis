@@ -17,13 +17,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import cz.dawon.java.gui.parserSetup.cards.ICard;
+import cz.dawon.java.gui.parserSetup.cards.JGraphAnalysisSettings;
 import cz.dawon.java.gui.parserSetup.cards.SelectFileCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
 
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class MainWindow extends JFrame {
 
@@ -70,6 +71,8 @@ public class MainWindow extends JFrame {
 	 */
 	private JButton cancelBTN = new JButton();
 	
+	
+	private JGraphAnalysisSettings settings = new JGraphAnalysisSettings();
 	
 	/**
 	 * Constuctor
@@ -163,7 +166,7 @@ public class MainWindow extends JFrame {
 		if (!cards[actCard].onNextPress()) {
 			return;
 		}
-		cards[cards[actCard].getNextCardId()].args(cards[actCard].getReturnArgs());
+		cards[cards[actCard].getNextCardId()].args(settings);
 		if (cards[actCard].isLast()) {
 			finish();
 		}

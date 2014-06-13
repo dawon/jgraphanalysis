@@ -5,7 +5,7 @@ import java.awt.Container;
 /**
  * Interface representating one "page" in setup wizard
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.3
  */
 public interface ICard {
 
@@ -52,16 +52,10 @@ public interface ICard {
 	public int getPrevCardId();
 	
 	/**
-	 * Gets outgoing arguments of this card
-	 * @return arguments
-	 */
-	public Object getReturnArgs();
-	
-	/**
 	 * Input arguments of this card
 	 * @param args input arguments
 	 */
-	public void args(Object args);
+	public void args(JGraphAnalysisSettings args);
 	
 	/**
 	 * Called when 'Previous' button is pressed

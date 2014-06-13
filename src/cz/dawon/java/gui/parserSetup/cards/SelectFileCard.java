@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 /**
  * Allows user to select single file to be parsed
  * @author Jakub Zacek
- * @version 1.4
+ * @version 1.5
  */
 public class SelectFileCard extends JPanel implements ICard {
 
@@ -103,7 +103,7 @@ public class SelectFileCard extends JPanel implements ICard {
 
 	@Override
 	public int getNextCardId() {
-		return 0; //TODO
+		return 3;
 	}
 
 	@Override
@@ -112,16 +112,7 @@ public class SelectFileCard extends JPanel implements ICard {
 	}
 
 	@Override
-	public Object getReturnArgs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void args(Object args) {
-		// TODO Auto-generated method stub
-
-	}
+	public void args(JGraphAnalysisSettings args) {}
 
 	@Override
 	public boolean onPrevPress() {
