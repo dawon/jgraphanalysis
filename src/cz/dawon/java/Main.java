@@ -9,9 +9,25 @@ import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetupListener;
 import cz.dawon.java.library.Action;
 import cz.dawon.java.library.JGraphAnalysis;
 
+/**
+ * Main example class
+ * @author Jakub Zacek
+ * @version 1.2
+ */
 public class Main {
 
+	/**
+	 * Entry point of program
+	 * @param args arguments
+	 */
 	public static void main(String[] args) {
+		start();
+	}
+	
+	/**
+	 * shows the wizard
+	 */
+	private static void start() {
 		JGraphAnalysisSetup setup = new JGraphAnalysisSetup();
 		setup.addJGraphAnalysisSetupListener(new JGraphAnalysisSetupListener() {
 			@Override
@@ -22,7 +38,11 @@ public class Main {
 		
 		setup.showDialog();
 	}
-	
+
+	/**
+	 * When wizard id done
+	 * @param jga {@link JGraphAnalysis}
+	 */
 	private static void onDone(JGraphAnalysis<String, String> jga) {
 		String res = "Done with result:\n\n";
 		
@@ -31,6 +51,11 @@ public class Main {
 			res += action.toString() + "\n";
 		}
 		JOptionPane.showMessageDialog(null, res);
+		
+		int r = JOptionPane.showConfirmDialog(null, "Do you want to process another file?");
+		if (r == 0) {
+			start();
+		}
 	}
 
 }
