@@ -19,6 +19,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,7 +32,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Abstract card for selecting nodes
  * @author Jakub Zacek
- * @version 1.2.1
+ * @version 1.2.2
  */
 public abstract class AbstractSelectNodeCard extends AbstractCard {
 
@@ -300,6 +301,8 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 				updateDetails(ns);
 			}
 		});
+		
+		nodesT.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);	
 		
 		return scrollSP;
 	}
