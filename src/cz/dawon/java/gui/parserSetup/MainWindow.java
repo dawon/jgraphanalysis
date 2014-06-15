@@ -17,7 +17,9 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import cz.dawon.java.gui.parserSetup.cards.ExportCard;
 import cz.dawon.java.gui.parserSetup.cards.ICard;
+import cz.dawon.java.gui.parserSetup.cards.ImportCard;
 import cz.dawon.java.gui.parserSetup.cards.JGraphAnalysisSettings;
 import cz.dawon.java.gui.parserSetup.cards.SelectActionCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectActionDataCard;
@@ -34,7 +36,7 @@ import cz.dawon.java.library.JGraphAnalysis;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.5
+ * @version 1.5.2
  */
 public class MainWindow extends JFrame {
 
@@ -52,7 +54,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * array of all cards
 	 */
-	private ICard[] cards = new ICard[10];
+	private ICard[] cards = new ICard[12];
 	
 	/**
 	 * instance of card layout
@@ -281,16 +283,18 @@ public class MainWindow extends JFrame {
 	 * Adds all of the cards
 	 */
 	private void addCards() {
-		cards[0] = new SelectModeCard();
-		cards[1] = new SelectFileCard();
-		cards[2] = new SelectFolderCard();
-		cards[3] = new SelectActionCard();
-		cards[4] = new SelectActionIdCard();
-		cards[5] = new SelectActionDataCard();
-		cards[6] = new SelectPrerequisityCard();
-		cards[7] = new SelectTightPrerequisityCard();
-		cards[8] = new SelectFollowerCard();
-		cards[9] = new SelectTightFollowerCard();
+		cards[0]  = new SelectModeCard();
+		cards[1]  = new SelectFileCard();
+		cards[2]  = new SelectFolderCard();
+		cards[3]  = new ImportCard();
+		cards[4]  = new SelectActionCard();
+		cards[5]  = new SelectActionIdCard();
+		cards[6]  = new SelectActionDataCard();
+		cards[7]  = new SelectPrerequisityCard();
+		cards[8]  = new SelectTightPrerequisityCard();
+		cards[9]  = new SelectFollowerCard();
+		cards[10] = new SelectTightFollowerCard();
+		cards[11] = new ExportCard();
 		
 		for (int i = 0; i < cards.length; i++) {
 			cardPN.add(createCard(cards[i]), Integer.toString(i));

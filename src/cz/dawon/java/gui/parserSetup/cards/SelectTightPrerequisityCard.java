@@ -3,7 +3,7 @@ package cz.dawon.java.gui.parserSetup.cards;
 /**
  * Allows user to select Attribute or Node representing Tight Prerequisity
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.2.1
  */
 public class SelectTightPrerequisityCard extends SelectActionIdCard {
 
@@ -11,7 +11,7 @@ public class SelectTightPrerequisityCard extends SelectActionIdCard {
 
 	@Override
 	public int getCardId() {
-		return 7;
+		return 8;
 	}
 	
 	@Override

@@ -3,7 +3,7 @@ package cz.dawon.java.gui.parserSetup.cards;
 /**
  * Allows user to select Attribute or Node representing Tight Follower
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.1.2
  */
 public class SelectTightFollowerCard extends SelectActionIdCard {
 
@@ -11,17 +11,12 @@ public class SelectTightFollowerCard extends SelectActionIdCard {
 
 	@Override
 	public int getCardId() {
-		return 9;
+		return 10;
 	}
 	
 	@Override
 	public String getCardTitle() {
 		return "Select Tight Follower Node or Attribute";
-	}
-	
-	@Override
-	public boolean isLast() {
-		return true;
 	}
 
 	@Override

@@ -30,13 +30,19 @@ public class XMLParser implements IFileParser<String, String> {
 	/**
 	 * Used to exactly specify Node or it's data in XML document
 	 * @author Jakub Zacek
-	 * @version 1.2
+	 * @version 1.4
 	 */
 	public static class NodeSelector {
+		
+		/**
+		 * Delimiter character for string representation of {@link NodeSelector}
+		 */
+		public static final char DELIMITER = '/';
+		
 		/**
 		 * Name of the node or null to use actual Node.
 		 */
-		public String nodeName;
+		public String nodeName = null;
 
 		/**
 		 * Attribute name of desired value. Null when inner value of element is desired
@@ -46,14 +52,34 @@ public class XMLParser implements IFileParser<String, String> {
 		/**
 		 * Dot separated list of parent elements, or null when there are not parent Nodes
 		 */
-		public String parents;
+		public String parents = null;
 
 		/**
 		 * constructor method
 		 */
 		public NodeSelector() {
-
 		}
+		
+		/**
+		 * constructor - creates {@link NodeSelector} from String (ie. node/attribute/parent1.parent2)
+		 * @param in source string
+		 * @throws ParseException when string is not in valid format
+		 */
+		public NodeSelector(String in) throws ParseException {
+			String[] data = in.trim().split("\\"+DELIMITER, -1);
+			if (data.length != 3) {
+				throw new ParseException("Unable to parse NodeSelector string ("+in+")!", 0);
+			}
+			if (data[0] != null && !data[0].isEmpty()) {
+				nodeName = new String(data[0].trim());
+			}
+			if (data[1] != null && !data[1].isEmpty()) {
+				attributeName = new String(data[1].trim());
+			}
+			if (data[2] != null && !data[2].isEmpty()) {
+				parents = new String(data[2].trim());
+			}			
+		}		
 		
 		/**
 		 * constructor method
@@ -69,10 +95,21 @@ public class XMLParser implements IFileParser<String, String> {
 		
 		@Override
 		public String toString() {
-			return parents + "." + nodeName + " ["+attributeName+"]";
+			String res = "";
+			if (nodeName != null) {
+				res += nodeName.trim();
+			}
+			res += DELIMITER;
+			if (attributeName != null) {
+				res += attributeName.trim();
+			}
+			res += DELIMITER;
+			if (parents != null) {
+				res += parents.trim();
+			}
+			return res;
 		}
-
-
+		
 	}
 
 	/**

@@ -7,7 +7,7 @@ import cz.dawon.java.library.Action;
 /**
  * Allows user to select Node representing {@link Action}
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.1.1
  */
 public class SelectActionCard extends AbstractSelectNodeCard {
 
@@ -15,17 +15,12 @@ public class SelectActionCard extends AbstractSelectNodeCard {
 
 	@Override
 	public int getCardId() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public String getCardTitle() {
 		return "Select Action Node";
-	}
-
-	@Override
-	public int getPrevCardId() {
-		return settings.singleFile ? 1 : 2;
 	}
 
 	@Override

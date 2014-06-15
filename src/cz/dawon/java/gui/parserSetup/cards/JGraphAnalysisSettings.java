@@ -5,7 +5,7 @@ import cz.dawon.java.library.parsers.XMLParser;
 /**
  * Class storing all data between all cards in wizard - no need to use getters and setters, this class will be used just in the wizard and all the checks are made in wizard.
  * @author Jakub Zacek	
- * @version 1.2
+ * @version 1.3
  */
 public class JGraphAnalysisSettings {
 	
@@ -33,6 +33,11 @@ public class JGraphAnalysisSettings {
 	 * {@link XMLParser} instance
 	 */
 	public XMLParser parser = new XMLParser();
+	
+	/**
+	 * should setup manually (true) or by import (false)
+	 */
+	public boolean manual = true;
 	
 	/**
 	 * empty constructor

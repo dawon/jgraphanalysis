@@ -3,7 +3,7 @@ package cz.dawon.java.gui.parserSetup.cards;
 /**
  * Allows user to select Attribute or Node representing Follower
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.2.1
  */
 public class SelectFollowerCard extends SelectActionIdCard {
 
@@ -11,7 +11,7 @@ public class SelectFollowerCard extends SelectActionIdCard {
 
 	@Override
 	public int getCardId() {
-		return 8;
+		return 9;
 	}
 	
 	@Override

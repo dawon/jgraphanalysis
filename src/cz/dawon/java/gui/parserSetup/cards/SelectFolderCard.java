@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 /**
  * Allows user to select folder to be looked in
  * @author Jakub Zacek
- * @version 1.3
+ * @version 1.3.1
  */
 public class SelectFolderCard extends AbstractCard {
 
@@ -138,11 +138,6 @@ public class SelectFolderCard extends AbstractCard {
 	@Override
 	public String getCardTitle() {
 		return "Select Folder";
-	}
-	
-	@Override
-	public int getNextCardId() {
-		return 3;
 	}
 
 	@Override
