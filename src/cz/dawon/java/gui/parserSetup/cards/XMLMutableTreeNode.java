@@ -92,7 +92,9 @@ public class XMLMutableTreeNode extends DefaultMutableTreeNode {
 			ns.attributeName = node.getNodeName();
 			if (this.getParent() != null) {
 				n = (XMLMutableTreeNode)this.getParent();
-				ns.nodeName = n.getNode().getNodeName();
+				if (skipRoot && this.getParent() != null && ((XMLMutableTreeNode)this.getParent().getParent()).getNode() != null) {
+					ns.nodeName = n.getNode().getNodeName();
+				}
 			}
 		} else {
 			ns.nodeName = node.getNodeName();
