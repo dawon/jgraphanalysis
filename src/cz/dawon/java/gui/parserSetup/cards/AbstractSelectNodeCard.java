@@ -32,7 +32,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Abstract card for selecting nodes
  * @author Jakub Zacek
- * @version 1.2.2
+ * @version 1.2.3
  */
 public abstract class AbstractSelectNodeCard extends AbstractCard {
 
@@ -285,6 +285,7 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 		XMLMutableTreeNode rootNode = new XMLMutableTreeNode("Document");
 		model = new DefaultTreeModel(rootNode);
 		nodesT = new JTree(model);
+		nodesT.setCellRenderer(new XMLTreeCellRenderer());
 		nodesT.setRootVisible(true);
 		JScrollPane scrollSP = new JScrollPane(nodesT);
 		scrollSP.setPreferredSize(new Dimension(200, 500));
@@ -302,7 +303,7 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 			}
 		});
 		
-		nodesT.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);	
+		nodesT.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		
 		return scrollSP;
 	}
