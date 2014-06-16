@@ -1,9 +1,11 @@
 package cz.dawon.java.library.parsers;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,7 +30,7 @@ import cz.dawon.java.library.Action;
 /**
  * Parser for XML documents. Typed to String ID and String Data
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.3
  */
 public class XMLParser implements IFileParser<String, String> {
 
@@ -402,6 +404,47 @@ public class XMLParser implements IFileParser<String, String> {
 			}
 		}
 	}	
+	
+	
+	/**
+	 * Creates string from {@link NodeSelector}
+	 * @param ns {@link NodeSelector}
+	 * @return output string
+	 */
+	private String exportLine(NodeSelector ns) {
+		if (ns == null) {
+			return "-";
+		}
+		return ns.toString();
+	}
+	
+	/**
+	 * Exports parser settings to the file
+	 * @param path file path
+	 * @throws IOException on write problems 
+	 */
+	public void exportToFile(String path) throws IOException {
+		if (path == null) {
+			throw new IllegalArgumentException("Path must not be null!");
+		}
+		BufferedWriter out = null;
+		try {
+			out = new BufferedWriter(new FileWriter(path));
+			
+			out.write(exportLine(this.getActionSelector())); out.newLine();
+			out.write(exportLine(this.getActionIdSelector())); out.newLine();
+			out.write(exportLine(this.getActionDataSelector())); out.newLine();
+			out.write(exportLine(this.getPrerequisitySelector())); out.newLine();
+			out.write(exportLine(this.getTightPrerequisitySelector())); out.newLine();
+			out.write(exportLine(this.getFollowerSelector())); out.newLine();
+			out.write(exportLine(this.getTightFollowerSelector())); out.newLine();
+		
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+	}		
 
 
 	/**

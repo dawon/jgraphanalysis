@@ -2,20 +2,17 @@ package cz.dawon.java.gui.parserSetup.cards;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 
 /**
  * Lets user export settings to file
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class ExportCard extends AbstractCard {
 
@@ -62,18 +59,6 @@ public class ExportCard extends AbstractCard {
 	}	
 	
 	/**
-	 * Creates string from {@link NodeSelector}
-	 * @param ns {@link NodeSelector}
-	 * @return output string
-	 */
-	private String write(NodeSelector ns) {
-		if (ns == null) {
-			return "-";
-		}
-		return ns.toString();
-	}
-	
-	/**
 	 * Exports to the file
 	 */
 	private void doExport() {
@@ -83,17 +68,7 @@ public class ExportCard extends AbstractCard {
 		}
 		
 		try {
-			BufferedWriter out = new BufferedWriter(new FileWriter(path));
-			
-			out.write(write(settings.parser.getActionSelector())); out.newLine();
-			out.write(write(settings.parser.getActionIdSelector())); out.newLine();
-			out.write(write(settings.parser.getActionDataSelector())); out.newLine();
-			out.write(write(settings.parser.getPrerequisitySelector())); out.newLine();
-			out.write(write(settings.parser.getTightPrerequisitySelector())); out.newLine();
-			out.write(write(settings.parser.getFollowerSelector())); out.newLine();
-			out.write(write(settings.parser.getTightFollowerSelector())); out.newLine();
-			
-			out.close();
+			settings.parser.exportToFile(path);
 			JOptionPane.showMessageDialog(this, "Successfully exported!", "Info", JOptionPane.INFORMATION_MESSAGE);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to export file! Check, that the destination file is writeable...", "Error", JOptionPane.ERROR_MESSAGE);
