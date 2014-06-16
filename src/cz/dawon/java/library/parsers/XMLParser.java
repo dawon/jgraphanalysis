@@ -1,12 +1,17 @@
 package cz.dawon.java.library.parsers;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -23,7 +28,7 @@ import cz.dawon.java.library.Action;
 /**
  * Parser for XML documents. Typed to String ID and String Data
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2
  */
 public class XMLParser implements IFileParser<String, String> {
 
@@ -33,12 +38,12 @@ public class XMLParser implements IFileParser<String, String> {
 	 * @version 1.4
 	 */
 	public static class NodeSelector {
-		
+
 		/**
 		 * Delimiter character for string representation of {@link NodeSelector}
 		 */
 		public static final char DELIMITER = '/';
-		
+
 		/**
 		 * Name of the node or null to use actual Node.
 		 */
@@ -59,7 +64,7 @@ public class XMLParser implements IFileParser<String, String> {
 		 */
 		public NodeSelector() {
 		}
-		
+
 		/**
 		 * constructor - creates {@link NodeSelector} from String (ie. node/attribute/parent1.parent2)
 		 * @param in source string
@@ -80,7 +85,7 @@ public class XMLParser implements IFileParser<String, String> {
 				parents = new String(data[2].trim());
 			}			
 		}		
-		
+
 		/**
 		 * constructor method
 		 * @param elementName element name
@@ -92,7 +97,7 @@ public class XMLParser implements IFileParser<String, String> {
 			this.attributeName = attributeName;
 			this.parents = parents;
 		}
-		
+
 		@Override
 		public String toString() {
 			String res = "";
@@ -109,7 +114,7 @@ public class XMLParser implements IFileParser<String, String> {
 			}
 			return res;
 		}
-		
+
 	}
 
 	/**
@@ -259,7 +264,7 @@ public class XMLParser implements IFileParser<String, String> {
 		if (sel == null) {
 			return null;
 		}
-		
+
 		if (sel.nodeName == null) {
 			if (sel.attributeName == null) {
 				return node.getTextContent();
@@ -267,27 +272,27 @@ public class XMLParser implements IFileParser<String, String> {
 				return node.getAttributes().getNamedItem(sel.attributeName).getNodeValue();
 			}			
 		}
-		
+
 		Node n;
-		
+
 		if (sel.nodeName != null && sel.attributeName != null && sel.nodeName.equals(node.getNodeName())) {
 			n = node;
 		} else {
 			n = findNode(node.getChildNodes(), sel, skip);
 		}
-		
-		
+
+
 		if (n == null) {
 			return null;
 		}
-		
+
 		if (sel.attributeName == null) {
 			return n.getTextContent();
 		} else {
 			return n.getAttributes().getNamedItem(sel.attributeName).getNodeValue();
 		}
 	}
-	
+
 	/**
 	 * Parses Action from Node
 	 * @param action Action to be parsed
@@ -300,35 +305,35 @@ public class XMLParser implements IFileParser<String, String> {
 			throw new ParseException("Unable to find ID of Action!", 0);
 		}
 		Action<String, String> a = new Action<String, String>(id);
-		
+
 		String data = getNodeData(action, this.actionData, 0);
 		a.setData(data);
-		
+
 		int skip = 0;
 		String val;
 		while ((val = getNodeData(action, this.prerequisity, skip)) != null) {
 			a.addPrerequisity(val);
 			skip++;
 		}
-		
+
 		skip = 0;
 		while ((val = getNodeData(action, this.tightPrerequisity, skip)) != null) {
 			a.addTightPrerequisity(val);
 			skip++;
 		}		
-		
+
 		skip = 0;
 		while ((val = getNodeData(action, this.follower, skip)) != null) {
 			a.addFollower(val);
 			skip++;
 		}
-		
+
 		skip = 0;
 		while ((val = getNodeData(action, this.tightFollower, skip)) != null) {
 			a.addTightFollower(val);
 			skip++;
 		}		
-		
+
 		return a;
 	}
 
@@ -337,7 +342,7 @@ public class XMLParser implements IFileParser<String, String> {
 		Document doc = loadXMLFile(fileName);
 
 		Set<Action<String, String>> actions = new HashSet<Action<String,String>>();
-		
+
 		int skip = 0;
 		Node n;
 		while ((n = findNode(doc.getChildNodes(), this.action, skip)) != null) {
@@ -347,6 +352,56 @@ public class XMLParser implements IFileParser<String, String> {
 
 		return actions;
 	}
+
+
+	/**
+	 * Reads line and creates {@link NodeSelector} instance
+	 * @param str line to be parsed
+	 * @param mandatory when true throws {@link ParseException} when is not set up
+	 * @return {@link NodeSelector}
+	 * @throws ParseException when problem with parsing
+	 */
+	private NodeSelector importLine(String str, boolean mandatory) throws ParseException {
+		if (str.trim().equals("-")) {
+			if (mandatory) {
+				throw new ParseException("This NodeSelector is mandatory!", 0);
+			}
+			return null;
+		}
+		return new NodeSelector(str);
+	}
+
+	/**
+	 * Imports parser settings from the file
+	 * @param path file to be imported from
+	 * @throws ParseException problems with parsing
+	 * @throws FileNotFoundException file was not found
+	 */
+	public void importFromFile(String path) throws ParseException, FileNotFoundException {
+		if (path == null) {
+			throw new IllegalArgumentException("Path must not be null!");
+		}
+		File f = new File(path);
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileReader(f));
+
+			this.setActionSelector(importLine(sc.nextLine(), true));
+			this.setActionIdSelector(importLine(sc.nextLine(), true));
+			this.setActionDataSelector(importLine(sc.nextLine(), false));
+			this.setPrerequisitySelector(importLine(sc.nextLine(), false));
+			this.setTightPrerequisitySelector(importLine(sc.nextLine(), false));
+			this.setFollowerSelector(importLine(sc.nextLine(), false));
+			this.setTightFollowerSelector(importLine(sc.nextLine(), false));
+
+		} catch (NoSuchElementException e) {
+			throw new ParseException(e.getMessage(), 0);
+		} finally {
+			if (sc != null) {
+				sc.close();
+			}
+		}
+	}	
 
 
 	/**
