@@ -32,7 +32,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Abstract card for selecting nodes
  * @author Jakub Zacek
- * @version 1.2.3
+ * @version 1.2.5
  */
 public abstract class AbstractSelectNodeCard extends AbstractCard {
 
@@ -238,23 +238,26 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 	/**
 	 * Updates details of selected node
 	 * @param ns {@link NodeSelector}
+	 * @param force if there was already selected some node and new value is null, should it really be done?
 	 */
-	protected void updateDetails(NodeSelector ns) {
-		selected = ns;
+	protected void updateDetails(NodeSelector ns, boolean force) {
+		if (selected == null || ns != null || force) {
+			selected = ns;
+		}
 		nodeNameLB.setText("Element name: -");
 		attrNameLB.setText("Attribute name: -");
 		pathLB.setText("Element parents: -");
-		if (ns == null) {
+		if (selected == null) {
 			return;
 		}
-		if (ns.nodeName != null) {
-			nodeNameLB.setText("Element name: '"+ns.nodeName+"'");
+		if (selected.nodeName != null) {
+			nodeNameLB.setText("Element name: '"+selected.nodeName+"'");
 		}
-		if (ns.attributeName != null) {
-			attrNameLB.setText("Attribute name: '"+ns.attributeName+"'");
+		if (selected.attributeName != null) {
+			attrNameLB.setText("Attribute name: '"+selected.attributeName+"'");
 		}
-		if (ns.parents != null) {
-			pathLB.setText("Element parents: '"+ns.parents+"'");
+		if (selected.parents != null) {
+			pathLB.setText("Element parents: '"+selected.parents+"'");
 		}	
 	}
 	
@@ -299,7 +302,7 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 				if (sel != null) {
 					ns = sel.getNodeSelector(getRootNode() != null);
 				}
-				updateDetails(ns);
+				updateDetails(ns, sel != null);
 			}
 		});
 		
@@ -324,7 +327,7 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 			filesCB.setSelectedIndex(0);
 		}
 		loadFile();
-		updateDetails(null);
+		updateDetails(null, false);
 	}
 
 	@Override
