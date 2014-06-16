@@ -22,21 +22,17 @@ import cz.dawon.java.gui.parserSetup.cards.ICard;
 import cz.dawon.java.gui.parserSetup.cards.ImportCard;
 import cz.dawon.java.gui.parserSetup.cards.JGraphAnalysisSettings;
 import cz.dawon.java.gui.parserSetup.cards.SelectActionCard;
-import cz.dawon.java.gui.parserSetup.cards.SelectActionDataCard;
+import cz.dawon.java.gui.parserSetup.cards.SelectNodeCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectActionIdCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFileCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectFolderCard;
-import cz.dawon.java.gui.parserSetup.cards.SelectFollowerCard;
 import cz.dawon.java.gui.parserSetup.cards.SelectModeCard;
-import cz.dawon.java.gui.parserSetup.cards.SelectPrerequisityCard;
-import cz.dawon.java.gui.parserSetup.cards.SelectTightFollowerCard;
-import cz.dawon.java.gui.parserSetup.cards.SelectTightPrerequisityCard;
 import cz.dawon.java.library.JGraphAnalysis;
 
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.5.2
+ * @version 1.6
  */
 public class MainWindow extends JFrame {
 
@@ -289,11 +285,9 @@ public class MainWindow extends JFrame {
 		cards[3]  = new ImportCard();
 		cards[4]  = new SelectActionCard();
 		cards[5]  = new SelectActionIdCard();
-		cards[6]  = new SelectActionDataCard();
-		cards[7]  = new SelectPrerequisityCard();
-		cards[8]  = new SelectTightPrerequisityCard();
-		cards[9]  = new SelectFollowerCard();
-		cards[10] = new SelectTightFollowerCard();
+		for (int i = 0; i < 5; i++) {
+			cards[i+6] = new SelectNodeCard(i);
+		}
 		cards[11] = new ExportCard();
 		
 		for (int i = 0; i < cards.length; i++) {
