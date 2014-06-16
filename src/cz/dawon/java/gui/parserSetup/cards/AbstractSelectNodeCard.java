@@ -32,7 +32,7 @@ import cz.dawon.java.library.parsers.XMLParser.NodeSelector;
 /**
  * Abstract card for selecting nodes
  * @author Jakub Zacek
- * @version 1.2.5
+ * @version 1.2.6
  */
 public abstract class AbstractSelectNodeCard extends AbstractCard {
 
@@ -90,7 +90,16 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 
 		sidePN.add(filesCB, BorderLayout.NORTH);
 		sidePN.add(createJTree(), BorderLayout.CENTER);
-		
+
+		this.add(sidePN, BorderLayout.WEST);
+		this.add(createDetailPanel(), BorderLayout.CENTER);
+	}
+
+	/**
+	 * Creates and return {@link JPanel} with details
+	 * @return {@link JPanel}
+	 */
+	private JPanel createDetailPanel() {
 		JPanel detailPN = new JPanel();
 		detailPN.setLayout(new BoxLayout(detailPN, BoxLayout.PAGE_AXIS));
 
@@ -99,9 +108,7 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 			detailPN.add(attrNameLB);
 		}
 		detailPN.add(pathLB);
-
-		this.add(sidePN, BorderLayout.WEST);
-		this.add(detailPN, BorderLayout.CENTER);
+		return detailPN;
 	}
 
 	/**
@@ -175,15 +182,10 @@ public abstract class AbstractSelectNodeCard extends AbstractCard {
 	 * Expands all nodes in {@link JTree}
 	 */
 	protected void expandAll() {
-		int row = 0;
-		while (row < nodesT.getRowCount()) {
-			nodesT.expandRow(row);
-			row++;
+		for (int i = 0; i < nodesT.getRowCount(); i++) {
+			nodesT.expandRow(i);
 		}
 	}
-	
-	
-
 
 	/**
 	 * Loads selected file in {@link JComboBox}
