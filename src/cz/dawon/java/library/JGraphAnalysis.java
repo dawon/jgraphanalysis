@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +33,12 @@ public class JGraphAnalysis<I, D> {
 	 * file parser instance
 	 */
 	private IFileParser<I, D> parser;
+	
+	
+	/**
+	 * {@link IGraphConnector} instance
+	 */
+	private IGraphConnector<I> graph;
 
 	/**
 	 * {@link HashMap} of parsed Actions
@@ -59,6 +67,23 @@ public class JGraphAnalysis<I, D> {
 	 */
 	public IFileParser<I, D> getParser() {
 		return parser;
+	}
+	
+	/**
+	 * sets the {@link IGraphConnector} for this class
+	 * @param connector {@link IGraphConnector}
+	 */
+	public void setGraphConnector(IGraphConnector<I> connector) {
+		this.graph = connector;
+	}
+	
+	
+	/**
+	 * gets the {@link IGraphConnector} instance for this class
+	 * @return {@link IGraphConnector}
+	 */
+	public IGraphConnector<I> getGraphConnector() {
+		return this.graph;
 	}
 	
 	/**
@@ -124,6 +149,30 @@ public class JGraphAnalysis<I, D> {
 	        }
 	    }		
 	    LOGGER.logp(Level.INFO, "JGraphAnalysis", "parseFolder", "Finished folder '"+path+"'...");
+	}
+	
+	private void checkIndexes(Set<I> actionIds) throws NoSuchElementException {
+		I id;
+		for (Iterator<I> iterator = actionIds.iterator(); iterator.hasNext();) {
+			id = iterator.next();
+			if (actions.get(id) == null) {
+				throw new NoSuchElementException("Can't find Action with ID '"+id.toString()+"'!");
+			}
+		}
+	}
+	
+	
+	public void process() throws NoSuchElementException {
+		Action<I, D> a;
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			a = getAction(iterator.next());
+			checkIndexes(a.getPrerequisities());
+			checkIndexes(a.getTightPrerequisities());
+			checkIndexes(a.getFollowers());
+			checkIndexes(a.getTightFollowers());
+		}
+		
+		
 	}
 
 	/**
