@@ -3,8 +3,9 @@ package cz.dawon.java.library;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,16 +33,16 @@ public class JGraphAnalysis<I, D> {
 	private IFileParser<I, D> parser;
 
 	/**
-	 * Set of parsed Actions
+	 * {@link HashMap} of parsed Actions
 	 */
-	private Set<Action<I, D>> actions;
+	private Map<I, Action<I, D>> actions;
 	
 	
 	/**
 	 * class constructor
 	 */
 	public JGraphAnalysis() {
-		this.actions = new HashSet<Action<I, D>>();
+		this.actions = new HashMap<I, Action<I, D>>();
 	}
 	
 	/**
@@ -84,7 +85,10 @@ public class JGraphAnalysis<I, D> {
 	public void parse(String fileName) {
 		LOGGER.logp(Level.INFO, "JGraphAnalysis", "parse", "Parsing file '"+fileName+"'...");
 		try {
-			actions.addAll(parser.parse(fileName));
+			for (Iterator<Action<I, D>> iterator = parser.parse(fileName).iterator(); iterator.hasNext();) {
+				Action<I, D> a = iterator.next();
+				actions.put(a.getId(), a);
+			}
 		} catch (IOException e) {
 			LOGGER.logp(Level.WARNING, "JGraphAnalysis", "parse", "Can't read file '"+fileName+"'! Skipping.", e);
 		} catch (ParseException e) {
@@ -123,11 +127,20 @@ public class JGraphAnalysis<I, D> {
 	}
 
 	/**
-	 * Gets Set of {@link Action}s
-	 * @return Set of {@link Action}s
+	 * Gets {@link HashMap} of {@link Action}s
+	 * @return {@link HashMap} of {@link Action}s
 	 */
-	public Set<Action<I, D>> getActions() {
+	public Map<I, Action<I, D>> getActions() {
 		return actions;
+	}
+	
+	/**
+	 * Gets single {@link Action} described by id
+	 * @param id id of {@link Action}
+	 * @return {@link Action}
+	 */
+	public Action<I, D> getAction(I id) {
+		return actions.get(id);
 	}
 	
 	

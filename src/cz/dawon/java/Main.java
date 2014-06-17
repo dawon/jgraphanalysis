@@ -46,8 +46,8 @@ public class Main {
 	private static void onDone(JGraphAnalysis<String, String> jga) {
 		String res = "Done with result:\n\n";
 		
-		for (Iterator<Action<String, String>> iterator = jga.getActions().iterator(); iterator.hasNext();) {
-			Action<String, String> action = (Action<String, String>) iterator.next();
+		for (Iterator<String> iterator = jga.getActions().keySet().iterator(); iterator.hasNext();) {
+			Action<String, String> action = jga.getAction(iterator.next());
 			res += action.toString() + "\n";
 		}
 		JOptionPane.showMessageDialog(null, res);
