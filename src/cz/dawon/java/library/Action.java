@@ -7,7 +7,7 @@ import java.util.Set;
  * Represents Single Action with its Followers and Prerequisities
  * 
  * @author Jakub Zacek
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -100,7 +100,7 @@ public class Action<I, D> {
 	 * @return set of prerequisities
 	 */
 	public Set<I> getPrerequisities() {
-		return new HashSet<I>(this.prerequisities);
+		return this.prerequisities;
 	}	
 	
 	
@@ -125,7 +125,7 @@ public class Action<I, D> {
 	 * @return set of tight prerequisities
 	 */
 	public Set<I> getTightPrerequisities() {
-		return new HashSet<I>(this.tightPrerequisities);
+		return this.tightPrerequisities;
 	}
 	
 	
@@ -152,7 +152,7 @@ public class Action<I, D> {
 	 * @return set of followers
 	 */
 	public Set<I> getFollowers() {
-		return new HashSet<I>(this.followers);
+		return this.followers;
 	}	
 	
 	
@@ -177,7 +177,7 @@ public class Action<I, D> {
 	 * @return set of tight followers
 	 */
 	public Set<I> getTightFollowers() {
-		return new HashSet<I>(this.tightFollowers);
+		return this.tightFollowers;
 	}		
 	
 	@Override

@@ -2,8 +2,10 @@ package cz.dawon.java.gui.parserSetup.cards;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
@@ -67,6 +69,11 @@ public class ImportCard extends AbstractCard {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
+		File f = new File(settings.path);
+		if (!f.isDirectory()) {
+			f = new File(f.getAbsolutePath());
+		}
+		fc.setCurrentDirectory(f);
 		int res = fc.showOpenDialog(this);
 		if (res == JFileChooser.APPROVE_OPTION) {
 			return fc.getSelectedFile().getAbsolutePath();
