@@ -1,0 +1,8 @@
+node { 
+	shape: box; 
+	size: 20px, 20px; 
+	fill-mode: plain; 
+	fill-color: red; 
+	stroke-mode: plain; 
+	stroke-color: blue; 
+}

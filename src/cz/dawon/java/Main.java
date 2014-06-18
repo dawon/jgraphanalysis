@@ -7,12 +7,13 @@ import javax.swing.JOptionPane;
 import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetup;
 import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetupListener;
 import cz.dawon.java.library.Action;
+import cz.dawon.java.library.GraphStreamConnector;
 import cz.dawon.java.library.JGraphAnalysis;
 
 /**
  * Main example class
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.3
  */
 public class Main {
 
@@ -45,6 +46,13 @@ public class Main {
 	 */
 	private static void onDone(JGraphAnalysis<String, String> jga) {
 		String res = "Done with result:\n\n";
+		
+		jga.setGraphConnector(new GraphStreamConnector());
+		jga.getGraphConnector().createGraph("Test");
+		
+		jga.process();
+		
+		jga.getGraphConnector().getComponent();
 		
 		for (Iterator<String> iterator = jga.getActions().keySet().iterator(); iterator.hasNext();) {
 			Action<String, String> action = jga.getAction(iterator.next());

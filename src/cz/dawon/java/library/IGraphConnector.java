@@ -5,7 +5,7 @@ import java.awt.Component;
 /**
  * Used to implement Graph functions to specific library
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.2
  * @param <I> data type of Vertex and Edge identificators
  */
 public interface IGraphConnector<I> {
@@ -79,6 +79,13 @@ public interface IGraphConnector<I> {
 	public void removeVertexData(I vertex, String id);	
 	
 	/**
+	 * Changes style of a vertex
+	 * @param vertex vertex identificator
+	 * @param style {@link EStyle}
+	 */
+	public void changeVertexStyle(I vertex, EStyle style);
+	
+	/**
 	 * Adds edge to graph
 	 * @param edge edge identificator
 	 * @param from first vertex identificator
@@ -130,6 +137,21 @@ public interface IGraphConnector<I> {
 	 * @param id data identificator
 	 */			
 	public void removeEdgeData(I edge, String id);		
+	
+	/**
+	 * Changes style of a edge
+	 * @param edge edge identificator
+	 * @param style {@link EStyle}
+	 */
+	public void changeEdgeStyle(I edge, EStyle style);	
+	
+	/**
+	 * Creates from two IDs one unique ID for edge
+	 * @param from first vertex identificator
+	 * @param to second vertex identificator
+	 * @return identificator for edge
+	 */
+	public I createEdgeId(I from, I to);
 	
 	/**
 	 * Gets {@link Component} containing rendered graph
