@@ -11,18 +11,23 @@ import org.graphstream.graph.implementations.SingleGraph;
 /**
  * Graph connector for library GraphStream
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.2
  */
 public class GraphStreamConnector implements IGraphConnector<String> {
 
+	/**
+	 * Graph instance
+	 */
 	private SingleGraph graph;
 
 	@Override
 	public void createGraph(String name) {
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 		graph = new SingleGraph(name);
 		try {
 			String text = getFileContents("style/style.css");
-			graph.setAttribute("ui.stylesheet", text);
+			graph.removeAttribute("ui.stylesheet");
+			graph.addAttribute("ui.stylesheet", text);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -65,7 +70,8 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 
 	@Override
 	public void addVertex(String vertex) {
-		graph.addNode(getVertexIdentifier(vertex)).addAttribute("ui.label", vertex);
+		Node n = graph.addNode(getVertexIdentifier(vertex));
+		n.addAttribute("label", vertex);
 	}
 
 	@Override

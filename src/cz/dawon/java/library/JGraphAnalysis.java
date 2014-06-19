@@ -2,12 +2,12 @@ package cz.dawon.java.library;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +17,7 @@ import cz.dawon.java.library.parsers.IFileParser;
 /**
  * Main Class for the Library
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.5
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -150,76 +150,25 @@ public class JGraphAnalysis<I, D> {
 	    }		
 	    LOGGER.logp(Level.INFO, "JGraphAnalysis", "parseFolder", "Finished folder '"+path+"'...");
 	}
-	
-	/**
-	 * Checks whether connections to actions exist
-	 * @param actionIds {@link Set} of {@link Action} IDs
-	 * @throws NoSuchElementException when connection does not exist
-	 */
-	private void checkIndexes(Set<I> actionIds) throws NoSuchElementException {
-		I id;
-		for (Iterator<I> iterator = actionIds.iterator(); iterator.hasNext();) {
-			id = iterator.next();
-			if (actions.get(id) == null) {
-				throw new NoSuchElementException("Can't find Action with ID '"+id.toString()+"'!");
-			}
-		}
-	}
-	
-	/**
-	 * Transforms Followers to Prerequisities
-	 * @param action {@link Action}
-	 * @param actionIds {@link Set} of {@link Action} IDs
-	 * @param tight is it tight follower or follower?
-	 */
-	private void followersToPrerequisities(Action<I, D> action, Set<I> actionIds, boolean tight) {
-		I id;
-		for (Iterator<I> iterator = actionIds.iterator(); iterator.hasNext();) {
-			id = iterator.next();
-			if (tight) {
-				actions.get(id).addTightPrerequisity(action.getId());
-			} else {
-				actions.get(id).addPrerequisity(action.getId());
-			}
-			iterator.remove();
-		}
-	}
-	
-	/**
-	 * Connects tight prereqisities int graph
-	 * @param action {@link Action}
-	 */
-	private void connectTights(Action<I, D> action) {
-		I id;
-		for (Iterator<I> iterator = action.getTightPrerequisities().iterator(); iterator.hasNext();) {
-			id = iterator.next();
-			graph.addEdge(graph.createEdgeId(id, action.getId()), id, action.getId(), true);
-		}		
-	}
+
 	
 	/**
 	 * Processes the data loaded from xml
 	 * @throws NoSuchElementException when connection to {@link Action} does not exist
+	 * @throws InvalidAlgorithmParameterException when solution does not exist
 	 */
-	public void process() throws NoSuchElementException {
-		Action<I, D> a;
+	public void process() throws NoSuchElementException, InvalidAlgorithmParameterException {
+		PrecedenceGraphCreator<I, D> pgc = new PrecedenceGraphCreator<>(actions);
+		pgc.process();
 		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
-			a = getAction(iterator.next());
-			checkIndexes(a.getPrerequisities());
-			checkIndexes(a.getTightPrerequisities());
-			checkIndexes(a.getFollowers());
-			checkIndexes(a.getTightFollowers());
-			
-			followersToPrerequisities(a, a.getFollowers(), false);
-			followersToPrerequisities(a, a.getTightFollowers(), true);
-			
-			graph.addVertex(a.getId());
-			graph.changeVertexStyle(a.getId(), EStyle.DEFAULT);
-			graph.addVertexData(a.getId(), "data", a.getData());
-			connectTights(a);
+			Action<I, D> action = getAction(iterator.next());
+			graph.addVertex(action.getId());
+			graph.addVertexData(action.getId(), "data", action.getData());
 		}
-		
-		
+		for (Iterator<PrecedenceGraphCreator<I, D>.VirtualEdge> iterator = pgc.getEdges().iterator(); iterator.hasNext();) {
+			PrecedenceGraphCreator<I, D>.VirtualEdge conn = iterator.next();
+			graph.addEdge(graph.createEdgeId(conn.getFrom(), conn.getTo()), conn.getFrom(), conn.getTo(), true);
+		}
 	}
 
 	/**

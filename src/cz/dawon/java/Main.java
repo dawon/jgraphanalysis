@@ -1,6 +1,8 @@
 package cz.dawon.java;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import javax.swing.JOptionPane;
 
@@ -50,7 +52,13 @@ public class Main {
 		jga.setGraphConnector(new GraphStreamConnector());
 		jga.getGraphConnector().createGraph("Test");
 		
-		jga.process();
+		try {
+			jga.process();
+		} catch (NoSuchElementException e) {
+			JOptionPane.showMessageDialog(null, "Some referenced Actions don't exist!", "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (InvalidAlgorithmParameterException e) {
+			JOptionPane.showMessageDialog(null, "Solution does not exist for this input. Check cyclic referencies!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 		jga.getGraphConnector().getComponent();
 		
