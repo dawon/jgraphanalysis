@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Creates graph (its edges) from Actions
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.2
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -263,23 +263,11 @@ public class PrecedenceGraphCreator<I, D> {
 	 * @throws InvalidAlgorithmParameterException when solution does not exist
 	 */
 	public void process() throws NoSuchElementException, InvalidAlgorithmParameterException {
-		Action<I, D> a;
 		Map<Action<I, D>, Integer> alg = new HashMap<Action<I, D>, Integer>();
 		int depth = 0;
 		Set<Action<I, D>> acts = new HashSet<Action<I, D>>(actions.values());
-		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
-			a = actions.get(iterator.next());
-			checkIndexes(a.getPrerequisities());
-			checkIndexes(a.getTightPrerequisities());
-			checkIndexes(a.getFollowers());
-			checkIndexes(a.getTightFollowers());
-
-			followersToPrerequisities(a, a.getFollowers(), false);
-			followersToPrerequisities(a, a.getTightFollowers(), true);
-		}
-		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {		
-			connectTights(actions.get(iterator.next()));		
-		}		
+		
+		prepare();		
 
 		while (!acts.isEmpty()) {
 			a : for (Iterator<Action<I, D>> iterator2 = acts.iterator(); iterator2.hasNext();) {
@@ -306,13 +294,35 @@ public class PrecedenceGraphCreator<I, D> {
 					iterator2.remove();
 				}				
 			}
-		depth++;
-		if (depth > actions.size() + 1) {
-			throw new InvalidAlgorithmParameterException("Solution does not exist! (cyclic dependencies?) Unable to connect these Actions: " + getStringFromSet(acts));
-		}
+			depth++;
+			if (depth > actions.size() + 1) {
+				throw new InvalidAlgorithmParameterException("Solution does not exist! (cyclic dependencies?) Unable to connect these Actions: " + getStringFromSet(acts));
+			}
 		}
 		connectNormals(alg);
 
+	}
+
+
+	/**
+	 * prepares actions and does simple task before actual process
+	 * @throws NoSuchElementException when connection to {@link Action} does not exist
+	 */
+	private void prepare() throws NoSuchElementException {
+		Action<I, D> a;
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			a = actions.get(iterator.next());
+			checkIndexes(a.getPrerequisities());
+			checkIndexes(a.getTightPrerequisities());
+			checkIndexes(a.getFollowers());
+			checkIndexes(a.getTightFollowers());
+
+			followersToPrerequisities(a, a.getFollowers(), false);
+			followersToPrerequisities(a, a.getTightFollowers(), true);
+		}
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {		
+			connectTights(actions.get(iterator.next()));		
+		}
 	}
 
 	/**
