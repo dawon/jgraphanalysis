@@ -30,7 +30,7 @@ import cz.dawon.java.library.Action;
 /**
  * Parser for XML documents. Typed to String ID and String Data
  * @author Jakub Zacek
- * @version 1.3
+ * @version 1.3.1
  */
 public class XMLParser implements IFileParser<String, String> {
 
@@ -291,7 +291,11 @@ public class XMLParser implements IFileParser<String, String> {
 		if (sel.attributeName == null) {
 			return n.getTextContent();
 		} else {
-			return n.getAttributes().getNamedItem(sel.attributeName).getNodeValue();
+			if (n.getAttributes() != null && n.getAttributes().getNamedItem(sel.attributeName) != null) { 
+				return n.getAttributes().getNamedItem(sel.attributeName).getNodeValue();
+			} else {
+				return null;
+			}
 		}
 	}
 

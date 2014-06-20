@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Creates graph (its edges) from Actions
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -172,7 +172,7 @@ public class PrecedenceGraphCreator<I, D> {
 	 */
 	private Set<VirtualEdge> edges = new HashSet<VirtualEdge>();
 
-	
+
 	/**
 	 * constructor
 	 * @param actions {@link Map} of {@link Accessibles}s
@@ -244,6 +244,20 @@ public class PrecedenceGraphCreator<I, D> {
 	}
 
 	/**
+	 * Creates comma-separated {@link String} from {@link Set}
+	 * @param s {@link Set}
+	 * @return Comma-separated {@link String}
+	 */
+	private String getStringFromSet(Set<Action<I, D>> s) {
+		StringBuilder result = new StringBuilder();
+		for(Action<I, D> a : s) {
+			result.append(a.getId().toString());
+			result.append(",");
+		}
+		return result.length() > 0 ? result.substring(0, result.length() - 1): "";
+	}
+
+	/**
 	 * Processes the data loaded from loaded {@link Action}s
 	 * @throws NoSuchElementException when connection to {@link Action} does not exist
 	 * @throws InvalidAlgorithmParameterException when solution does not exist
@@ -270,6 +284,7 @@ public class PrecedenceGraphCreator<I, D> {
 		while (!acts.isEmpty()) {
 			a : for (Iterator<Action<I, D>> iterator2 = acts.iterator(); iterator2.hasNext();) {
 				Action<I, D> action = iterator2.next();
+				System.out.println(action.getId());
 				if (depth == 0) {
 					if (prerequisities.get(action.getId()).isEmpty() && tightPrerequisities.get(action.getId()).isEmpty()) {
 						alg.put(action, depth);
@@ -292,10 +307,10 @@ public class PrecedenceGraphCreator<I, D> {
 					iterator2.remove();
 				}				
 			}
-			depth++;
-			if (depth > actions.size() + 1) {
-				throw new InvalidAlgorithmParameterException("Solution does not exist! (cyclic dependencies?)");
-			}
+		depth++;
+		if (depth > actions.size() + 1) {
+			throw new InvalidAlgorithmParameterException("Solution does not exist! (cyclic dependencies?) Unable to connect these Actions: " + getStringFromSet(acts));
+		}
 		}
 		connectNormals(alg);
 

@@ -17,7 +17,7 @@ import cz.dawon.java.library.parsers.IFileParser;
 /**
  * Main Class for the Library
  * @author Jakub Zacek
- * @version 1.5
+ * @version 1.5.1
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -32,8 +32,7 @@ public class JGraphAnalysis<I, D> {
 	/**
 	 * file parser instance
 	 */
-	private IFileParser<I, D> parser;
-	
+	private IFileParser<I, D> parser;	
 	
 	/**
 	 * {@link IGraphConnector} instance
@@ -102,6 +101,17 @@ public class JGraphAnalysis<I, D> {
 	    return extension;
 	}	
 	
+	/**
+	 * Adds Vertices into Graph based on {@link Action}s
+	 */
+	public void addVertices() {
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			Action<I, D> action = getAction(iterator.next());
+			graph.addVertex(action.getId());
+			graph.addVertexData(action.getId(), "data", action.getData());
+		}
+	}
+	
 	
 	/**
 	 * Parses single file
@@ -160,14 +170,35 @@ public class JGraphAnalysis<I, D> {
 	public void process() throws NoSuchElementException, InvalidAlgorithmParameterException {
 		PrecedenceGraphCreator<I, D> pgc = new PrecedenceGraphCreator<>(actions);
 		pgc.process();
-		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
-			Action<I, D> action = getAction(iterator.next());
-			graph.addVertex(action.getId());
-			graph.addVertexData(action.getId(), "data", action.getData());
-		}
 		for (Iterator<PrecedenceGraphCreator<I, D>.VirtualEdge> iterator = pgc.getEdges().iterator(); iterator.hasNext();) {
 			PrecedenceGraphCreator<I, D>.VirtualEdge conn = iterator.next();
 			graph.addEdge(graph.createEdgeId(conn.getFrom(), conn.getTo()), conn.getFrom(), conn.getTo(), true);
+		}
+	}
+	
+	public void selectVertex(I id) {
+		Action<I, D> action = getAction(id);
+		Action<I, D> a;
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			a =  getAction(iterator.next());
+			
+			if (action != null && action.getId().equals(a.getId())) {
+				graph.changeVertexStyle(a.getId(), EStyle.SELECTED);
+			} else
+			if (action != null && action.getPrerequisities().contains(a.getId())) {
+				graph.changeVertexStyle(a.getId(), EStyle.PREREQUISITY);
+			} else
+			if (action != null && action.getTightPrerequisities().contains(a.getId())) {
+				graph.changeVertexStyle(a.getId(), EStyle.TIGHT_PREREQUISITY);
+			} else
+			if (action != null && action.getFollowers().contains(a.getId())) {
+				graph.changeVertexStyle(a.getId(), EStyle.FOLLOWER);
+			} else
+			if (action != null && action.getTightFollowers().contains(a.getId())) {
+				graph.changeVertexStyle(a.getId(), EStyle.TIGHT_FOLLOWER);
+			} else {
+				graph.changeVertexStyle(a.getId(), EStyle.DEFAULT);
+			}
 		}
 	}
 

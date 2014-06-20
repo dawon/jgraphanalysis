@@ -159,4 +159,9 @@ public interface IGraphConnector<I> {
 	 */
 	public Component getComponent();
 	
+	/**
+	 * Updates Graph Visualisation UI
+	 */
+	public void updateUI();
+	
 }

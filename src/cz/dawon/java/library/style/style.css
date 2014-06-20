@@ -1,12 +1,11 @@
 graph {
-	padding: 20;
 }
 
 node { 
 	shape: circle; 
-	size: 20px, 20px; 
+	size: 15px, 15px; 
 	fill-mode: dyn-plain;
-	fill-color: green; 
+	fill-color: black; 
 	stroke-mode: plain; 
 	stroke-color: blue; 
 	text-background-mode: rounded-box;
@@ -17,4 +16,58 @@ node {
 	text-padding: 3;
 	text-offset: 0, 5;
 	text-background-color: #CECECE;
+}
+
+edge { 
+	arrow-shape: arrow; 
+	arrow-size: 7px, 7px; 
+}
+
+node.selected { 
+	shape: circle; 
+	size: 28px, 28px; 
+	fill-mode: dyn-plain;
+	fill-color: green; 
+	stroke-mode: plain; 
+	stroke-color: #999; 
+	shadow-mode: gradient-vertical; 
+	shadow-width: 4px; 
+	shadow-color: #999, white; 
+	shadow-offset: 0px; 
+}
+
+node.prerequisity { 
+	shape: diamond; 
+	size: 20px, 20px; 
+	fill-mode: dyn-plain;
+	fill-color: blue; 
+	stroke-mode: plain; 
+	stroke-color: black; 
+}
+
+node.tightPrerequisity { 
+	shape: diamond; 
+	size: 20px, 20px; 
+	fill-mode: dyn-plain;
+	fill-color: red; 
+	stroke-mode: plain; 
+	stroke-color: black; 
+}
+
+node.follower { 
+	shape: rounded-box; 
+	size: 20px, 20px; 
+	fill-mode: dyn-plain;
+	fill-color: blue; 
+	stroke-mode: plain; 
+	stroke-color: black; 
+}
+
+node.tightFollower { 
+	shape: rounded-box; 
+	size: 20px, 20px; 
+	fill-mode: dyn-plain;
+	fill-color: red; 
+	stroke-mode: plain; 
+	stroke-color: black; 
 }

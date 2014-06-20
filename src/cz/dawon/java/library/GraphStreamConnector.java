@@ -7,11 +7,13 @@ import java.io.InputStreamReader;
 
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.swingViewer.View;
+import org.graphstream.ui.swingViewer.Viewer;
 
 /**
  * Graph connector for library GraphStream
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.3
  */
 public class GraphStreamConnector implements IGraphConnector<String> {
 
@@ -19,6 +21,11 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	 * Graph instance
 	 */
 	private SingleGraph graph;
+	
+	/**
+	 * {@link Viewer} instance
+	 */
+	private Viewer viewer;
 
 	@Override
 	public void createGraph(String name) {
@@ -28,6 +35,8 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 			String text = getFileContents("style/style.css");
 			graph.removeAttribute("ui.stylesheet");
 			graph.addAttribute("ui.stylesheet", text);
+			graph.addAttribute("ui.quality");
+			graph.addAttribute("ui.antialias");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -136,9 +145,11 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 
 	@Override
 	public Component getComponent() {
-		graph.display();
-		// TODO
-		return null;
+		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);		
+		viewer.enableAutoLayout();
+		View view = viewer.addDefaultView(false);
+		viewer.enableAutoLayout();
+		return view;
 	}
 
 	@Override
@@ -149,9 +160,9 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	@Override
 	public void changeVertexStyle(String vertex, EStyle style) {
 		Node n = graph.getNode(getVertexIdentifier(vertex));
+		n.removeAttribute("ui.class");
 		switch (style) {
 		case DEFAULT:
-			n.removeAttribute("ui.class");
 			break;
 		case SELECTED:
 			n.setAttribute("ui.class", "selected");
@@ -190,6 +201,13 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	 */	
 	private String getEdgeIdentifier(String id) {
 		return "e" + id;
+	}
+
+	
+	@Override
+	public void updateUI() {
+		viewer.disableAutoLayout();
+		viewer.enableAutoLayout();
 	}	
 
 }

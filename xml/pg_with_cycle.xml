@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<actions>
+  <action id="A">
+  </action>
+  
+  <action id="B">
+    <tpre>A</tpre>
+    <pre>D</pre>
+    <tfol>C</tfol>
+  </action>
+  
+  <action id="C">
+    <pre>D</pre>
+  </action>
+
+  <action id="D">
+    <fol>G</fol>
+    <tpre>F</tpre>
+  </action>
+
+  <action id="E">
+    <pre>B</pre>
+  </action>
+  
+  <action id="F">
+    <pre>C</pre>
+    <tpre>H</tpre>
+  </action>  
+
+  <action id="G">
+    <tfol>I</tfol>
+  </action>  
+  
+  <action id="H">
+    <tpre>G</tpre>
+  </action>   
+  
+  <action id="I">
+  </action>   
+  
+  <action id="J">
+    <pre>F</pre>
+    <pre>E</pre>
+    <pre>I</pre>
+  </action>   
+</actions>
+

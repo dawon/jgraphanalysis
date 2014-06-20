@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -32,9 +33,9 @@ import cz.dawon.java.library.JGraphAnalysis;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.6
+ * @version 1.7
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JDialog {
 
 	private static final long serialVersionUID = -5542626286639824349L;
 
@@ -79,15 +80,18 @@ public class MainWindow extends JFrame {
 	 */
 	private JButton cancelBTN = new JButton();
 	
-	
+	/**
+	 * {@link JGraphAnalysisSettings} instance
+	 */
 	private JGraphAnalysisSettings settings = new JGraphAnalysisSettings();
 	
 	/**
 	 * Constuctor
-	 * @param jgas instance of JGraphAnalysisSetup
+	 * @param fr parent {@link JFrame}
+	 * @param jgas instance of {@link JGraphAnalysisSetup}
 	 */
-	public MainWindow(JGraphAnalysisSetup jgas) {
-		super("JGraphAnalysis");
+	public MainWindow(JFrame fr, JGraphAnalysisSetup jgas) {
+		super(fr, "JGraphAnalysis - Wizard");
 		this.jgas = jgas;
 		
 		try {
@@ -96,9 +100,10 @@ public class MainWindow extends JFrame {
 			e.printStackTrace();
 		}		
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setModal(true);
+		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setSize(600, 500);
-		this.setLocationRelativeTo(null);
+		this.setLocationRelativeTo(fr);
 		this.setResizable(false);
 		
 		this.createMainPanel();

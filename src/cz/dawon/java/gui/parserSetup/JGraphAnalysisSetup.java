@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import cz.dawon.java.library.JGraphAnalysis;
 
 /**
  * Shows GUI allowing user to setup JGraphAnalysis and XML parser and then returning a JGraphAnalysis instance
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class JGraphAnalysisSetup {
 
@@ -19,10 +21,16 @@ public class JGraphAnalysisSetup {
 	private List<JGraphAnalysisSetupListener> listeners;
 	
 	/**
-	 * constructor
+	 * parent {@link JFrame}
 	 */
-	public JGraphAnalysisSetup() {
-		
+	private JFrame parent;
+	
+	/**
+	 * constructor
+	 * @param parent parent {@link JFrame}
+	 */
+	public JGraphAnalysisSetup(JFrame parent) {
+		this.parent = parent;
 	}
 	
 	
@@ -42,7 +50,7 @@ public class JGraphAnalysisSetup {
 	 * Shows the GUI
 	 */
 	public void showDialog() {
-		new MainWindow(this).showWindow();
+		new MainWindow(parent, this).showWindow();
 	}
 	
 	
