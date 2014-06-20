@@ -284,7 +284,6 @@ public class PrecedenceGraphCreator<I, D> {
 		while (!acts.isEmpty()) {
 			a : for (Iterator<Action<I, D>> iterator2 = acts.iterator(); iterator2.hasNext();) {
 				Action<I, D> action = iterator2.next();
-				System.out.println(action.getId());
 				if (depth == 0) {
 					if (prerequisities.get(action.getId()).isEmpty() && tightPrerequisities.get(action.getId()).isEmpty()) {
 						alg.put(action, depth);

@@ -176,6 +176,10 @@ public class JGraphAnalysis<I, D> {
 		}
 	}
 	
+	/**
+	 * Selects Vertex ({@link Action}) with specified id
+	 * @param id ID of {@link Action}
+	 */
 	public void selectVertex(I id) {
 		Action<I, D> action = getAction(id);
 		Action<I, D> a;
