@@ -160,7 +160,29 @@ public class JGraphAnalysis<I, D> {
 	    }		
 	    LOGGER.logp(Level.INFO, "JGraphAnalysis", "parseFolder", "Finished folder '"+path+"'...");
 	}
+	
+	/**
+	 * Creates instance of {@link PrecedenceGraphCreator}
+	 * @return {@link PrecedenceGraphCreator} instance
+	 */
+	public PrecedenceGraphCreator<I, D> init() {
+		return new PrecedenceGraphCreator<>(actions);
+	}
 
+	
+	/**
+	 * Processes the data loaded from xml
+	 * @param pgc {@link PrecedenceGraphCreator} instance
+	 * @throws NoSuchElementException when connection to {@link Action} does not exist
+	 * @throws InvalidAlgorithmParameterException when solution does not exist
+	 */
+	public void process(PrecedenceGraphCreator<I, D> pgc) throws NoSuchElementException, InvalidAlgorithmParameterException {
+		pgc.process();
+		for (Iterator<PrecedenceGraphCreator<I, D>.VirtualEdge> iterator = pgc.getEdges().iterator(); iterator.hasNext();) {
+			PrecedenceGraphCreator<I, D>.VirtualEdge conn = iterator.next();
+			graph.addEdge(graph.createEdgeId(conn.getFrom(), conn.getTo()), conn.getFrom(), conn.getTo(), true);
+		}
+	}
 	
 	/**
 	 * Processes the data loaded from xml
@@ -168,13 +190,8 @@ public class JGraphAnalysis<I, D> {
 	 * @throws InvalidAlgorithmParameterException when solution does not exist
 	 */
 	public void process() throws NoSuchElementException, InvalidAlgorithmParameterException {
-		PrecedenceGraphCreator<I, D> pgc = new PrecedenceGraphCreator<>(actions);
-		pgc.process();
-		for (Iterator<PrecedenceGraphCreator<I, D>.VirtualEdge> iterator = pgc.getEdges().iterator(); iterator.hasNext();) {
-			PrecedenceGraphCreator<I, D>.VirtualEdge conn = iterator.next();
-			graph.addEdge(graph.createEdgeId(conn.getFrom(), conn.getTo()), conn.getFrom(), conn.getTo(), true);
-		}
-	}
+		this.process(this.init());
+	} 
 	
 	/**
 	 * Selects Vertex ({@link Action}) with specified id

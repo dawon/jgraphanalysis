@@ -37,7 +37,7 @@ public class XMLParser implements IFileParser<String, String> {
 	/**
 	 * Used to exactly specify Node or it's data in XML document
 	 * @author Jakub Zacek
-	 * @version 1.4
+	 * @version 1.4.1
 	 */
 	public static class NodeSelector {
 
@@ -190,9 +190,9 @@ public class XMLParser implements IFileParser<String, String> {
 			builder.setErrorHandler(new XMLParserErrorHandler());
 			doc = builder.parse(new ByteArrayInputStream(Files.readAllBytes(Paths.get(fileName))));
 		} catch (ParserConfigurationException e) {
-			throw new ParseException("", 0);
+			throw new ParseException(e.getMessage(), 0);
 		} catch (SAXException e) {
-			throw new ParseException("", 0);
+			throw new ParseException(e.getMessage(), 0);
 		}	
 		return doc;
 	}

@@ -1,13 +1,15 @@
 package cz.dawon.java.library;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Represents Single Action with its Followers and Prerequisities
  * 
  * @author Jakub Zacek
- * @version 1.0.2
+ * @version 1.1
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -24,21 +26,14 @@ public class Action<I, D> {
 	private D data;
 	
 	/**
-	 * Set of action identifiers that must happen before this action
+	 * {@link HashMap} of {@link Set}s containing Prerequisities (0), Tight Prerequisities (1), Followers (2) and Tight Followers (3)
 	 */
-	private Set<I> prerequisities;
+	private Map<Integer, Set<I>> references;
+	
 	/**
-	 * Set of action identifiers that must happen just before this action
-	 */	
-	private Set<I> tightPrerequisities;
-	/**
-	 * Set of action identifiers that must happen after this action
-	 */	
-	private Set<I> followers;
-	/**
-	 * Set of action identifiers that must happen just after this action
-	 */	
-	private Set<I> tightFollowers;
+	 * {@link String} names of all references...
+	 */
+	public static final String[] REFERENCES_NAMES = new String[] {"Prerequisities", "Tight Prerequisities", "Followers", "Tight Followers"};
 	
 	/**
 	 * class constructor
@@ -47,10 +42,11 @@ public class Action<I, D> {
 	public Action(I id) {
 		this.id = id;
 		
-		prerequisities      = new HashSet<I>();
-		tightPrerequisities = new HashSet<I>();
-		followers           = new HashSet<I>();
-		tightFollowers      = new HashSet<I>();
+		references = new HashMap<Integer, Set<I>>();
+		
+		for (int i = 0; i < REFERENCES_NAMES.length; i++) {
+			references.put(i, new HashSet<I>());	
+		}
 	}
 	
 	
@@ -84,7 +80,7 @@ public class Action<I, D> {
 	 * @param p prerequisity identifier
 	 */
 	public void addPrerequisity(I p) {
-		this.prerequisities.add(p);
+		this.references.get(0).add(p);
 	}
 	
 	/**
@@ -92,7 +88,7 @@ public class Action<I, D> {
 	 * @param p prerequisity identifier
 	 */
 	public void removePrerequisity(I p) {
-		this.prerequisities.remove(p);
+		this.references.get(0).remove(p);
 	}	
 	
 	/**
@@ -100,7 +96,7 @@ public class Action<I, D> {
 	 * @return set of prerequisities
 	 */
 	public Set<I> getPrerequisities() {
-		return this.prerequisities;
+		return this.references.get(0);
 	}	
 	
 	
@@ -109,7 +105,7 @@ public class Action<I, D> {
 	 * @param p tight prerequisity identifier
 	 */
 	public void addTightPrerequisity(I p) {
-		this.tightPrerequisities.add(p);
+		this.references.get(1).add(p);
 	}
 	
 	/**
@@ -117,7 +113,7 @@ public class Action<I, D> {
 	 * @param p tight prerequisity identifier
 	 */
 	public void removeTightPrerequisity(I p) {
-		this.tightPrerequisities.remove(p);
+		this.references.get(1).remove(p);
 	}	
 	
 	/**
@@ -125,7 +121,7 @@ public class Action<I, D> {
 	 * @return set of tight prerequisities
 	 */
 	public Set<I> getTightPrerequisities() {
-		return this.tightPrerequisities;
+		return this.references.get(1);
 	}
 	
 	
@@ -136,7 +132,7 @@ public class Action<I, D> {
 	 * @param f follower identifier
 	 */
 	public void addFollower(I f) {
-		this.followers.add(f);
+		this.references.get(2).add(f);
 	}
 	
 	/**
@@ -144,7 +140,7 @@ public class Action<I, D> {
 	 * @param p follower identifier
 	 */
 	public void removeFollower(I f) {
-		this.followers.remove(f);
+		this.references.get(2).remove(f);
 	}	
 	
 	/**
@@ -152,7 +148,7 @@ public class Action<I, D> {
 	 * @return set of followers
 	 */
 	public Set<I> getFollowers() {
-		return this.followers;
+		return this.references.get(2);
 	}	
 	
 	
@@ -161,7 +157,7 @@ public class Action<I, D> {
 	 * @param p tight follower identifier
 	 */
 	public void addTightFollower(I f) {
-		this.tightFollowers.add(f);
+		this.references.get(3).add(f);
 	}
 	
 	/**
@@ -169,7 +165,7 @@ public class Action<I, D> {
 	 * @param p tight follower identifier
 	 */
 	public void removeTightFollower(I f) {
-		this.tightFollowers.remove(f);
+		this.references.get(3).remove(f);
 	}	
 	
 	/**
@@ -177,24 +173,31 @@ public class Action<I, D> {
 	 * @return set of tight followers
 	 */
 	public Set<I> getTightFollowers() {
-		return this.tightFollowers;
+		return this.references.get(3);
 	}		
+	
+	/**
+	 * Returns {@link HashMap} containing all references
+	 * @return {@link HashMap}
+	 */
+	public Map<Integer, Set<I>> getRawReferences() {
+		return this.references;
+	}
 	
 	@Override
 	public String toString() {
 		String res = "";
 		
 		res += "Action(id="+this.id+") { ";
+		res += "Data='"+this.data+"'";
 		
-		res += "Prerequisities=" + this.prerequisities;
+		for (int i = 0; i < REFERENCES_NAMES.length; i++) {
+			if (!references.get(i).isEmpty()) {
+				res += "; " + REFERENCES_NAMES[i] + "=" + this.references.get(i);
+			}
+		}
 		
-		res += "; Tight Prerequisities=" + this.tightPrerequisities;
-		
-		res += "; Followers=" + this.followers;
-		
-		res += "; Tight Followers=" + this.tightFollowers;
-		
-		res += "; Data='"+this.data+"'}";
+		res += "}";
 		return res;
 	}
 	

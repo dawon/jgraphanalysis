@@ -1,11 +1,12 @@
 package cz.dawon.java.library;
 
 import java.awt.Component;
+import java.util.List;
 
 /**
  * Used to implement Graph functions to specific library
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.3
  * @param <I> data type of Vertex and Edge identificators
  */
 public interface IGraphConnector<I> {
@@ -86,6 +87,13 @@ public interface IGraphConnector<I> {
 	public void changeVertexStyle(I vertex, EStyle style);
 	
 	/**
+	 * Returns {@link List} of Edges that has oriented Edge from this Vertex
+	 * @param vertex initial Vertex
+	 * @return {@link List} of Edges
+	 */
+	public List<I> getEdgesFromVertex(I vertex);
+	
+	/**
 	 * Adds edge to graph
 	 * @param edge edge identificator
 	 * @param from first vertex identificator
@@ -114,6 +122,20 @@ public interface IGraphConnector<I> {
 	 * @return true if exists, false otherwise
 	 */		
 	public boolean existEdge(I edge);
+	
+	/**
+	 * Returns ID of Vertex Edge is leading to
+	 * @param edge Edge ID
+	 * @return Vertex Vertex ID
+	 */
+	public I getEdgeTo(I edge);
+
+	/**
+	 * Returns ID of Vertex Edge is leading from
+	 * @param edge Edge ID
+	 * @return Vertex Vertex ID
+	 */
+	public I getEdgeFrom(I edge);	
 	
 	/**
 	 * Adds some data to edge

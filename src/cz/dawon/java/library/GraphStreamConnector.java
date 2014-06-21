@@ -4,33 +4,42 @@ import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
 
 /**
  * Graph connector for library GraphStream
  * @author Jakub Zacek
- * @version 1.3
+ * @version 1.4
  */
 public class GraphStreamConnector implements IGraphConnector<String> {
 
 	/**
 	 * Graph instance
 	 */
-	private SingleGraph graph;
-	
+	private MultiGraph graph;
+
 	/**
 	 * {@link Viewer} instance
 	 */
 	private Viewer viewer;
 
+	/**
+	 * unique int
+	 */
+	private int unique = 0;
+
 	@Override
 	public void createGraph(String name) {
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-		graph = new SingleGraph(name);
+		graph = new MultiGraph(name);
 		try {
 			String text = getFileContents("style/style.css");
 			graph.removeAttribute("ui.stylesheet");
@@ -154,7 +163,7 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 
 	@Override
 	public String createEdgeId(String from, String to) {
-		return from + "_" + to;
+		return from + "_" + to + Integer.toString(unique++);
 	}
 
 	@Override
@@ -202,12 +211,52 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	private String getEdgeIdentifier(String id) {
 		return "e" + id;
 	}
-
 	
+	/**
+	 * Reverts Identifier back to initial format
+	 * @param identifier identifier
+	 * @return id
+	 */
+	private String revertIdentifier(String identifier) {
+		return identifier.substring(1);
+	}
+
+
 	@Override
 	public void updateUI() {
 		viewer.disableAutoLayout();
 		viewer.enableAutoLayout();
+	}
+
+	@Override
+	public List<String> getEdgesFromVertex(String vertex) {
+		ArrayList<String> res = new ArrayList<String>();
+		Node n = graph.getNode(getVertexIdentifier(vertex));
+		if (n == null) {
+			return res;
+		}
+		for (Iterator<Edge> iterator = n.getEachLeavingEdge().iterator(); iterator.hasNext();) {
+			res.add(revertIdentifier(iterator.next().getId()));
+		}
+		return res;
+	}
+
+	@Override
+	public String getEdgeTo(String edge) {
+		return revertIdentifier(graph.getEdge(getEdgeIdentifier(edge)).getTargetNode().getId());
+	}
+
+	@Override
+	public String getEdgeFrom(String edge) {
+		return revertIdentifier(graph.getEdge(getEdgeIdentifier(edge)).getSourceNode().getId());
 	}	
+	
+	/**
+	 * Returns {@link MultiGraph} instance
+	 * @return {@link MultiGraph} instance
+	 */
+	public MultiGraph getGraph() {
+		return graph;
+	}
 
 }

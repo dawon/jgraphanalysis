@@ -1,9 +1,11 @@
 package cz.dawon.java.library;
 
 import java.security.InvalidAlgorithmParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -11,13 +13,69 @@ import java.util.Set;
 /**
  * Creates graph (its edges) from Actions
  * @author Jakub Zacek
- * @version 1.2
+ * @version 1.3
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
  */
 public class PrecedenceGraphCreator<I, D> {
 
+	/**
+	 * Exactly represents {@link Action} Reference
+	 * @author Jakub Zacek
+	 * @version 1.0
+	 */
+	public class ReferenceIdentificator {
+		/**
+		 * first vertex
+		 */		
+		private I from;
+		/**
+		 * second vertex
+		 */		
+		private I to;
+		/**
+		 * reference type
+		 */
+		private int type;
+		
+		public ReferenceIdentificator(int type, I from, I to) {
+			this.type = type;
+			this.from = from;
+			this.to = to;
+		}
+
+		/**
+		 * Gets first vertex
+		 * @return first vertex
+		 */
+		public I getFrom() {
+			return from;
+		}
+
+		/**
+		 * Gets second vertex
+		 * @return second vertex
+		 */		
+		public I getTo() {
+			return to;
+		}
+
+		/**
+		 * Gets type of Reference
+		 * @return type of reference
+		 */
+		public int getType() {
+			return type;
+		}
+		
+		@Override
+		public String toString() {
+			return Action.REFERENCES_NAMES[type] + ": " + from.toString() + " -> " + to.toString();
+		}
+	}
+	
+	
 	/**
 	 * Represents Virtual Edge in graph
 	 * @author Jakub Zacek
@@ -185,9 +243,7 @@ public class PrecedenceGraphCreator<I, D> {
 			acc.put(a, new Accessibles(a.getId()));
 
 			prerequisities.put(a.getId(), new HashSet<I>());
-			prerequisities.get(a.getId()).addAll(a.getPrerequisities());
-			tightPrerequisities.put(a.getId(), new HashSet<I>());
-			tightPrerequisities.get(a.getId()).addAll(a.getTightPrerequisities());			
+			tightPrerequisities.put(a.getId(), new HashSet<I>());	
 		}
 	}
 
@@ -242,7 +298,96 @@ public class PrecedenceGraphCreator<I, D> {
 			acc.get(actions.get(id)).inherit(acc.get(action));
 		}			
 	}
+	
+	/**
+	 * Creates graph from actions - not result graph, only to find cycles...
+	 * @param graph {@link IGraphConnector} instance
+	 */
+	private void createGraphFromSet(IGraphConnector<I> graph) {
+		Action<I, D> a;
+		I sc, eid;
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			a = actions.get(iterator.next());
+			graph.addVertex(a.getId());			
+		}
+		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			a = actions.get(iterator.next());
+			for (int i = 0; i < Action.REFERENCES_NAMES.length; i++) {
+				for (Iterator<I> iterator2 = a.getRawReferences().get(i).iterator(); iterator2.hasNext();) {
+					sc = iterator2.next();
+					if (i < 2) {
+						eid = graph.createEdgeId(sc, a.getId());
+						graph.addEdge(eid, sc, a.getId(), true);
+					} else {
+						eid = graph.createEdgeId(a.getId(), sc);
+						graph.addEdge(eid, a.getId(), sc, true);
+					}
+					graph.addEdgeData(eid, "type", i);
+				}
+			}	
+		}		
+	}
 
+	/**
+	 * Finds cycles in Graph recursively
+	 * @param graph {@link IGraphConnector} instance
+	 * @param edge processed edge
+	 * @param vertex processed vertex
+	 * @param visitedVertices visited vertices
+	 * @param completedVertices completed vertices
+	 * @param badReferences found bad references (cycles)
+	 */
+    private void findCycles(IGraphConnector<I> graph, I edge, I vertex, Set<I> visitedVertices, Set<I> completedVertices, List<ReferenceIdentificator> badReferences) {    	
+        if (edge != null && visitedVertices.contains(vertex)) {
+            if (completedVertices.contains(vertex)) {
+            	return;
+            }
+            badReferences.add(new ReferenceIdentificator((int)graph.getEdgeData(edge, "type"), graph.getEdgeFrom(edge), graph.getEdgeTo(edge)));
+            return;
+        }
+
+        visitedVertices.add(vertex);
+
+        for (Iterator<I> iterator = graph.getEdgesFromVertex(vertex).iterator(); iterator.hasNext(); ) {
+            I e = iterator.next();
+        	findCycles(graph, e, graph.getEdgeTo(e), visitedVertices, completedVertices, badReferences);
+        }
+
+        completedVertices.add(vertex);
+    }	
+    
+    /**
+     * Finds cycles in Precedence Graph and tries to fix them
+     * @param graph {@link IGraphConnector} instance
+     * @return {@link List} of problematic references ({@link ReferenceIdentificator})
+     * @throws NoSuchElementException when connection to {@link Action} does not exist
+     */
+    public List<ReferenceIdentificator> findAndFixCycles(IGraphConnector<I> graph, boolean fix) throws NoSuchElementException {
+        Set<I> visitedVertices = new HashSet<I>();
+        Set<I> completedVertices = new HashSet<I>();
+    	List<ReferenceIdentificator> refs = new ArrayList<ReferenceIdentificator>();
+    	
+    	prepare(false);
+    	
+    	createGraphFromSet(graph);
+    	
+    	for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
+			findCycles(graph, null, iterator.next(), visitedVertices, completedVertices, refs);
+		}
+    	
+    	if (fix) {
+    		for (Iterator<ReferenceIdentificator> iterator = refs.iterator(); iterator.hasNext();) {
+    			ReferenceIdentificator id = iterator.next();
+				if (id.getType() < 2) {
+					actions.get(id.getTo()).getRawReferences().get(id.getType()).remove(id.getFrom());
+				} else {
+					actions.get(id.getFrom()).getRawReferences().get(id.getType()).remove(id.getTo());
+				}
+     		}
+    	}
+    	return refs;
+    }
+	
 	/**
 	 * Creates comma-separated {@link String} from {@link Set}
 	 * @param s {@link Set}
@@ -267,15 +412,18 @@ public class PrecedenceGraphCreator<I, D> {
 		int depth = 0;
 		Set<Action<I, D>> acts = new HashSet<Action<I, D>>(actions.values());
 		
-		prepare();		
+		prepare(true);		
 
+		boolean change;
 		while (!acts.isEmpty()) {
+			change = false;
 			a : for (Iterator<Action<I, D>> iterator2 = acts.iterator(); iterator2.hasNext();) {
 				Action<I, D> action = iterator2.next();
 				if (depth == 0) {
 					if (prerequisities.get(action.getId()).isEmpty() && tightPrerequisities.get(action.getId()).isEmpty()) {
 						alg.put(action, depth);
 						iterator2.remove();
+						change = true;
 					}
 				} else {
 					for (Iterator<I> iterator = prerequisities.get(action.getId()).iterator(); iterator.hasNext();) {
@@ -292,10 +440,11 @@ public class PrecedenceGraphCreator<I, D> {
 					}						
 					alg.put(action, depth);
 					iterator2.remove();
+					change = true;
 				}				
 			}
 			depth++;
-			if (depth > actions.size() + 1) {
+			if (!change) {
 				throw new InvalidAlgorithmParameterException("Solution does not exist! (cyclic dependencies?) Unable to connect these Actions: " + getStringFromSet(acts));
 			}
 		}
@@ -308,7 +457,7 @@ public class PrecedenceGraphCreator<I, D> {
 	 * prepares actions and does simple task before actual process
 	 * @throws NoSuchElementException when connection to {@link Action} does not exist
 	 */
-	private void prepare() throws NoSuchElementException {
+	private void prepare(boolean full) throws NoSuchElementException {
 		Action<I, D> a;
 		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {
 			a = actions.get(iterator.next());
@@ -317,8 +466,15 @@ public class PrecedenceGraphCreator<I, D> {
 			checkIndexes(a.getFollowers());
 			checkIndexes(a.getTightFollowers());
 
-			followersToPrerequisities(a, a.getFollowers(), false);
-			followersToPrerequisities(a, a.getTightFollowers(), true);
+			if (full) {
+				followersToPrerequisities(a, a.getFollowers(), false);
+				followersToPrerequisities(a, a.getTightFollowers(), true);			
+				prerequisities.get(a.getId()).addAll(a.getPrerequisities());
+				tightPrerequisities.get(a.getId()).addAll(a.getTightPrerequisities());
+			}
+		}
+		if (!full) {
+			return;
 		}
 		for (Iterator<I> iterator = actions.keySet().iterator(); iterator.hasNext();) {		
 			connectTights(actions.get(iterator.next()));		
