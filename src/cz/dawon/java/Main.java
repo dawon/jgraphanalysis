@@ -38,7 +38,7 @@ import cz.dawon.java.library.PrecedenceGraphCreator;
 /**
  * Main example class
  * @author Jakub Zacek
- * @version 1.6
+ * @version 1.6.1
  */
 public class Main extends JFrame {
 
@@ -115,9 +115,9 @@ public class Main extends JFrame {
 		mainPN.add(graphPN, BorderLayout.CENTER);
 
 		detailsTA = new JTextArea();
-		detailsTA.setEnabled(false);
-		detailsTA.setFont(new Font(detailsTA.getFont().getFamily(), 25, Font.PLAIN));
+		detailsTA.setFont(new Font(detailsTA.getFont().getFamily(), Font.PLAIN, 25));
 		detailsTA.setPreferredSize(new Dimension(200, 570));
+		detailsTA.setEditable(false);
 		mainPN.add(detailsTA, BorderLayout.EAST);
 
 	}
