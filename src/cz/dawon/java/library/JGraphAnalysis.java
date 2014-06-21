@@ -3,31 +3,24 @@ package cz.dawon.java.library;
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import cz.dawon.java.library.parsers.IFileParser;
 
 
 /**
  * Main Class for the Library
  * @author Jakub Zacek
- * @version 1.5.1
+ * @version 1.5.3
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
  */
 public class JGraphAnalysis<I, D> {
-
-	/**
-	 * Logger instance
-	 */
-	private final static Logger LOGGER = Logger.getLogger(JGraphAnalysis.class.getName());
 	
 	/**
 	 * file parser instance
@@ -116,20 +109,14 @@ public class JGraphAnalysis<I, D> {
 	/**
 	 * Parses single file
 	 * @param fileName name and path of the file to parse
+	 * @throws ParseException when problem with parsing
+	 * @throws IOException problem with reading the file
 	 */
-	public void parse(String fileName) {
-		LOGGER.logp(Level.INFO, "JGraphAnalysis", "parse", "Parsing file '"+fileName+"'...");
-		try {
+	public void parse(String fileName) throws IOException, ParseException {
 			for (Iterator<Action<I, D>> iterator = parser.parse(fileName).iterator(); iterator.hasNext();) {
 				Action<I, D> a = iterator.next();
 				actions.put(a.getId(), a);
 			}
-		} catch (IOException e) {
-			LOGGER.logp(Level.WARNING, "JGraphAnalysis", "parse", "Can't read file '"+fileName+"'! Skipping.", e);
-		} catch (ParseException e) {
-			LOGGER.logp(Level.WARNING, "JGraphAnalysis", "parse", "Can't parse file '"+fileName+"'! Skipping.", e);
-		}
-		LOGGER.logp(Level.INFO, "JGraphAnalysis", "parse", "File '"+fileName+"' successfully parsed...");
 	}
 	
 	
@@ -138,17 +125,16 @@ public class JGraphAnalysis<I, D> {
 	 * @param path path of the folder to walk through - must not be null
 	 * @param recursive should be walkthrough recursive?
 	 * @param extension extension of files to parse, or null to parse all files
+	 * @throws ParseException when problem with parsing
+	 * @throws IOException problem with reading the file
 	 */
-	public void parseFolder(String path, boolean recursive, String extension) {
+	public void parseFolder(String path, boolean recursive, String extension) throws IOException, ParseException {
 		if (path == null) {
-			LOGGER.logp(Level.SEVERE, "JGraphAnalysis", "parseFolder", "Parameter 'path' can't be NULL. Exiting.");
-			return;
+			throw new NullPointerException("Path can't be null!");
 		}
-		LOGGER.logp(Level.INFO, "JGraphAnalysis", "parseFolder", "Opening folder '"+path+"'...");
 		File folder = new File(path);
 		if (!folder.exists() || !folder.isDirectory()) {
-			LOGGER.logp(Level.SEVERE, "JGraphAnalysis", "parseFolder", "Path must exist and must be a directory! Exiting.");
-			return;			
+			throw new InvalidParameterException("Path must exist and must be a directory! Exiting.");	
 		}
 		
 	    for (final File file : folder.listFiles()) {
@@ -158,7 +144,6 @@ public class JGraphAnalysis<I, D> {
 	            parse(file.getAbsolutePath());
 	        }
 	    }		
-	    LOGGER.logp(Level.INFO, "JGraphAnalysis", "parseFolder", "Finished folder '"+path+"'...");
 	}
 	
 	/**

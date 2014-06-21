@@ -7,11 +7,14 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.ParseException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -33,7 +36,7 @@ import cz.dawon.java.library.JGraphAnalysis;
 /**
  * Shows the Main Window of the Setup wizard
  * @author Jakub Zacek
- * @version 1.7
+ * @version 1.7.1
  */
 public class MainWindow extends JDialog {
 
@@ -43,7 +46,7 @@ public class MainWindow extends JDialog {
 	 * instance of JGraphAnalysisSetup
 	 */
 	private JGraphAnalysisSetup jgas;
-	
+
 	/**
 	 * id of actually shown card
 	 */
@@ -52,12 +55,12 @@ public class MainWindow extends JDialog {
 	 * array of all cards
 	 */
 	private ICard[] cards = new ICard[12];
-	
+
 	/**
 	 * instance of card layout
 	 */
 	private CardLayout cl = new CardLayout();
-	
+
 	/**
 	 * card Panel
 	 */
@@ -66,7 +69,7 @@ public class MainWindow extends JDialog {
 	 * main Panel
 	 */
 	private JPanel mainPN = new JPanel();
-	
+
 	/**
 	 * instance of Next Button
 	 */
@@ -79,12 +82,12 @@ public class MainWindow extends JDialog {
 	 * instance of Cancel Button
 	 */
 	private JButton cancelBTN = new JButton();
-	
+
 	/**
 	 * {@link JGraphAnalysisSettings} instance
 	 */
 	private JGraphAnalysisSettings settings = new JGraphAnalysisSettings();
-	
+
 	/**
 	 * Constuctor
 	 * @param fr parent {@link JFrame}
@@ -93,24 +96,24 @@ public class MainWindow extends JDialog {
 	public MainWindow(JFrame fr, JGraphAnalysisSetup jgas) {
 		super(fr, "JGraphAnalysis - Wizard");
 		this.jgas = jgas;
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
-		
+
 		this.setModal(true);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setSize(600, 500);
 		this.setLocationRelativeTo(fr);
 		this.setResizable(false);
-		
+
 		this.createMainPanel();
 		cards[actCard].args(settings);
 		this.showCard(this.actCard);
 	}
-	
+
 	/**
 	 * Shows the window
 	 */
@@ -123,25 +126,25 @@ public class MainWindow extends JDialog {
 	 */
 	private void createMainPanel() {
 		mainPN.setLayout(new BorderLayout());
-		
+
 		mainPN.add(cardPN, BorderLayout.CENTER);
-		
+
 		JPanel buttonsPN = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		
+
 		prepareButtons();
-		
+
 		buttonsPN.add(prevBTN);
 		buttonsPN.add(nextBTN);
 		buttonsPN.add(cancelBTN);
-		
+
 		mainPN.add(buttonsPN, BorderLayout.SOUTH);
-		
+
 		addCards();
-		
+
 		this.add(mainPN);
 	}
-	
-	
+
+
 	/**
 	 * Sets up all buttons
 	 */
@@ -149,47 +152,55 @@ public class MainWindow extends JDialog {
 		prevBTN.setText("Previous");
 		nextBTN.setText("Next");
 		cancelBTN.setText("Cancel");		
-		
+
 		nextBTN.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				next();
 			}
 		});
-		
+
 		prevBTN.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				prev();
 			}
 		});
-		
+
 		cancelBTN.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancel();
 			}
 		});
-		
+
 	}
-	
+
 	/**
 	 * Called when Next is pressed on last card
 	 */
 	private void finish() {
 		JGraphAnalysis<String, String> jga = new JGraphAnalysis<String, String>();
 		jga.setParser(settings.parser);
-		
-		if (settings.singleFile) {
-			jga.parse(settings.path);
-		} else {
-			jga.parseFolder(settings.path, settings.recursive, settings.extension);
+
+		try {
+			if (settings.singleFile) {
+				jga.parse(settings.path);
+			} else {
+				jga.parseFolder(settings.path, settings.recursive, settings.extension);
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, "Error while reading the file: "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(this, "Error while parsing the file: "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
-		
+
 		jgas.setUpDone(jga);
 		this.close();
 	}
-	
+
 	/**
 	 * Called when Next button is pressed
 	 */
@@ -205,7 +216,7 @@ public class MainWindow extends JDialog {
 		this.actCard = cards[actCard].getNextCardId();
 		showCard(this.actCard);
 	}
-	
+
 	/**
 	 * Called when Previous button is pressed
 	 */	
@@ -219,7 +230,7 @@ public class MainWindow extends JDialog {
 		this.actCard = cards[actCard].getPrevCardId();
 		showCard(this.actCard);
 	}
-	
+
 	/**
 	 * Called when Cancel button is pressed
 	 */	
@@ -229,13 +240,13 @@ public class MainWindow extends JDialog {
 		}
 		this.close();
 	}
-	
+
 	private void close() {
 		this.setVisible(false);
 		this.dispose();
 	}
-	
-	
+
+
 	/**
 	 * Shows card with specified id
 	 * @param cardId id of card to be shown
@@ -247,17 +258,17 @@ public class MainWindow extends JDialog {
 		if (card.isFirst()) {
 			prevBTN.setEnabled(false);
 		}
-		
+
 		nextBTN.setText("Next");
 		if (card.isLast()) {
 			nextBTN.setText("Finish");
 		}
-		
+
 		card.onCardShow();
-		
+
 		cl.show(cardPN, Integer.toString(cardId));
 	}
-	
+
 	/**
 	 * Creates container containing specified card
 	 * @param card card
@@ -278,8 +289,8 @@ public class MainWindow extends JDialog {
 
 		return res;
 	}	
-	
-	
+
+
 	/**
 	 * Adds all of the cards
 	 */
@@ -294,10 +305,10 @@ public class MainWindow extends JDialog {
 			cards[i+6] = new SelectNodeCard(i);
 		}
 		cards[11] = new ExportCard();
-		
+
 		for (int i = 0; i < cards.length; i++) {
 			cardPN.add(createCard(cards[i]), Integer.toString(i));
 		}
 	}
-	
+
 }
