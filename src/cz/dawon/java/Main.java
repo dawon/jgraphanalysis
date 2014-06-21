@@ -31,9 +31,9 @@ import javax.swing.tree.TreeSelectionModel;
 import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetup;
 import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetupListener;
 import cz.dawon.java.library.Action;
-import cz.dawon.java.library.GraphStreamConnector;
 import cz.dawon.java.library.JGraphAnalysis;
 import cz.dawon.java.library.PrecedenceGraphCreator;
+import cz.dawon.java.library.graphConnectors.GraphStreamConnector;
 
 /**
  * Main example class

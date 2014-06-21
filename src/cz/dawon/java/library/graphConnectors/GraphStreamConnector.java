@@ -1,4 +1,4 @@
-package cz.dawon.java.library;
+package cz.dawon.java.library.graphConnectors;
 
 import java.awt.Component;
 import java.io.BufferedReader;

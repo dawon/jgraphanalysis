@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import cz.dawon.java.library.graphConnectors.IGraphConnector;
+
 /**
  * Creates graph (its edges) from Actions
  * @author Jakub Zacek

@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
+import cz.dawon.java.library.graphConnectors.EStyle;
+import cz.dawon.java.library.graphConnectors.IGraphConnector;
 import cz.dawon.java.library.parsers.IFileParser;
 
 

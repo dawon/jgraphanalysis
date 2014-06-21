@@ -1,4 +1,4 @@
-package cz.dawon.java.library;
+package cz.dawon.java.library.graphConnectors;
 
 /**
  * Values for styling Vertexes and Edges of graph
