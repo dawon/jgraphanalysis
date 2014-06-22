@@ -8,11 +8,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Lets user export settings to file
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.1.1
  */
 public class ExportCard extends AbstractCard {
 
@@ -51,6 +52,9 @@ public class ExportCard extends AbstractCard {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
+		FileFilter ff = new UniversalFileFilter("JGraphAnalysis Settings files", true).addExtension("gas");
+		fc.addChoosableFileFilter(ff);
+		fc.setFileFilter(ff);		
 		int res = fc.showSaveDialog(this);
 		if (res == JFileChooser.APPROVE_OPTION) {
 			return fc.getSelectedFile().getAbsolutePath();

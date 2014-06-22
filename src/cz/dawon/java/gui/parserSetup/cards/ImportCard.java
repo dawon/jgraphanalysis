@@ -11,11 +11,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Lets user select whether to setup parser manually or from file
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.1.1
  */
 public class ImportCard extends AbstractCard {
 
@@ -69,6 +70,9 @@ public class ImportCard extends AbstractCard {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
+		FileFilter ff = new UniversalFileFilter("JGraphAnalysis Settings files", true).addExtension("gas");
+		fc.addChoosableFileFilter(ff);
+		fc.setFileFilter(ff);
 		File f = new File(settings.path);
 		if (!f.isDirectory()) {
 			f = new File(f.getAbsolutePath());

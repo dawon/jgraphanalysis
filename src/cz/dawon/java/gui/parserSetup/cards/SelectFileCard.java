@@ -13,11 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Allows user to select single file to be parsed
  * @author Jakub Zacek
- * @version 1.6
+ * @version 1.6.1
  */
 public class SelectFileCard extends AbstractCard {
 
@@ -73,6 +74,9 @@ public class SelectFileCard extends AbstractCard {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
+		FileFilter ff = new UniversalFileFilter("XML Files", true).addExtension("xml");
+		fc.addChoosableFileFilter(ff);
+		fc.setFileFilter(ff);		
 		int res = fc.showOpenDialog(this);
 		if (res == JFileChooser.APPROVE_OPTION) {
 			pathTF.setText(fc.getSelectedFile().getAbsolutePath());
