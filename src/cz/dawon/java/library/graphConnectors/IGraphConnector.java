@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Used to implement Graph functions to specific library
  * @author Jakub Zacek
- * @version 1.3
+ * @version 1.4
  * @param <I> data type of Vertex and Edge identificators
  */
 public interface IGraphConnector<I> {
@@ -185,5 +185,17 @@ public interface IGraphConnector<I> {
 	 * Updates Graph Visualisation UI
 	 */
 	public void updateUI();
+	
+	/**
+	 * Adds new Click listener
+	 * @param listener {@link IGraphClickListener}
+	 */
+	public void addClickListener(IGraphClickListener<I> listener);
+	
+	/**
+	 * Removes Click Listener
+	 * @param listener {@link IGraphClickListener}
+	 */
+	public void removeClickListener(IGraphClickListener<I> listener);
 	
 }

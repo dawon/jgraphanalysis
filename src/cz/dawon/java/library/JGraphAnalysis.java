@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import cz.dawon.java.library.graphConnectors.EStyle;
+import cz.dawon.java.library.graphConnectors.IGraphClickListener;
 import cz.dawon.java.library.graphConnectors.IGraphConnector;
 import cz.dawon.java.library.parsers.IFileParser;
 
@@ -18,7 +19,7 @@ import cz.dawon.java.library.parsers.IFileParser;
 /**
  * Main Class for the Library
  * @author Jakub Zacek
- * @version 1.5.3
+ * @version 1.5.5
  *
  * @param <I> datatype for Action's identifier
  * @param <D> datatype for Action's data
@@ -106,6 +107,14 @@ public class JGraphAnalysis<I, D> {
 			graph.addVertex(action.getId());
 			graph.addVertexData(action.getId(), "data", action.getData());
 		}
+		graph.addClickListener(new IGraphClickListener<I>() {
+			@Override
+			public void onMouseDown(I vertex) {
+				selectVertex(vertex);
+			}
+			@Override
+			public void onMouseUp(I vertex) {}
+		});				
 	}
 	
 	

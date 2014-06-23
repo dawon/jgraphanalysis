@@ -34,6 +34,7 @@ import cz.dawon.java.library.Action;
 import cz.dawon.java.library.JGraphAnalysis;
 import cz.dawon.java.library.PrecedenceGraphCreator;
 import cz.dawon.java.library.graphConnectors.GraphStreamConnector;
+import cz.dawon.java.library.graphConnectors.IGraphClickListener;
 
 /**
  * Main example class
@@ -285,12 +286,23 @@ public class Main extends JFrame {
 
 		jga.setGraphConnector(new GraphStreamConnector());
 		jga.getGraphConnector().createGraph("Test");
-
+		
 		jga.addVertices();
 		toolbarTB.getComponent(1).setEnabled(true);
 
 		this.graphPN.removeAll();
 		this.graphPN.add(jga.getGraphConnector().getComponent(), BorderLayout.CENTER);
+		
+		jga.getGraphConnector().addClickListener(new IGraphClickListener<String>() {
+			
+			@Override
+			public void onMouseUp(String vertex) {}	
+			@Override
+			public void onMouseDown(String vertex) {
+				detailsTA.setText(Main.this.jga.getAction(vertex).getData());				
+			}
+		});
+		
 
 		updateJTree();
 

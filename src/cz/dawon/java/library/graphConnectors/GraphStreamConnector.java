@@ -13,13 +13,15 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
+import org.graphstream.ui.swingViewer.ViewerListener;
+import org.graphstream.ui.swingViewer.ViewerPipe;
 
 /**
  * Graph connector for library GraphStream
  * @author Jakub Zacek
- * @version 1.4
+ * @version 1.5
  */
-public class GraphStreamConnector implements IGraphConnector<String> {
+public class GraphStreamConnector implements IGraphConnector<String>, ViewerListener, Runnable {
 
 	/**
 	 * Graph instance
@@ -36,9 +38,20 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	 */
 	private int unique = 0;
 
+	/**
+	 * Click listeners {@link List}
+	 */
+	private List<IGraphClickListener<String>> listeners = new ArrayList<IGraphClickListener<String>>();
+
+	/**
+	 * Is the graph view still running?
+	 */
+	private boolean loop;
+
 	@Override
 	public void createGraph(String name) {
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+		loop = true;
 		graph = new MultiGraph(name);
 		try {
 			String text = getFileContents("style/style.css");
@@ -154,10 +167,11 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 
 	@Override
 	public Component getComponent() {
-		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);		
+		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_SWING_THREAD);		
 		viewer.enableAutoLayout();
 		View view = viewer.addDefaultView(false);
 		viewer.enableAutoLayout();
+		new Thread(this).start();
 		return view;
 	}
 
@@ -211,7 +225,7 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	private String getEdgeIdentifier(String id) {
 		return "e" + id;
 	}
-	
+
 	/**
 	 * Reverts Identifier back to initial format
 	 * @param identifier identifier
@@ -250,13 +264,60 @@ public class GraphStreamConnector implements IGraphConnector<String> {
 	public String getEdgeFrom(String edge) {
 		return revertIdentifier(graph.getEdge(getEdgeIdentifier(edge)).getSourceNode().getId());
 	}	
-	
+
 	/**
 	 * Returns {@link MultiGraph} instance
 	 * @return {@link MultiGraph} instance
 	 */
 	public MultiGraph getGraph() {
 		return graph;
+	}
+
+	@Override
+	public void addClickListener(IGraphClickListener<String> listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeClickListener(IGraphClickListener<String> listener) {
+		listeners.remove(listener);
+	}
+
+	@Override
+	public void buttonPushed(String vertex) {
+		for (Iterator<IGraphClickListener<String>> iterator = listeners.iterator(); iterator.hasNext();) {
+			iterator.next().onMouseDown(revertIdentifier(vertex));
+		}		
+	}
+
+	@Override
+	public void buttonReleased(String vertex) {
+		for (Iterator<IGraphClickListener<String>> iterator = listeners.iterator(); iterator.hasNext();) {
+			iterator.next().onMouseUp(revertIdentifier(vertex));
+		}
+	}
+
+	@Override
+	public void viewClosed(String vertex) {
+		loop = false;
+	}
+
+	/**
+	 * Handles all clicks in mouse
+	 */
+	@Override
+	public void run() {
+		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
+
+		ViewerPipe fromViewer = viewer.newViewerPipe();
+		fromViewer.addViewerListener(this);
+		fromViewer.addSink(graph);
+		fromViewer.removeElementSink(graph);
+
+
+		while(loop) {
+			fromViewer.pump();
+		}
 	}
 
 }
