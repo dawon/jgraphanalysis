@@ -7,7 +7,7 @@ import cz.dawon.java.library.Action;
 /**
  * Modified {@link DefaultMutableTreeNode} to be used with Actions
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.1
  */
 public class ActionMutableTreeNode extends DefaultMutableTreeNode {
 
@@ -17,6 +17,11 @@ public class ActionMutableTreeNode extends DefaultMutableTreeNode {
 	 * type of this node
 	 */
 	protected int type;
+	
+	/**
+	 * was reference removed
+	 */
+	protected boolean removed = false;
 
 	/**
 	 * constructor
@@ -69,6 +74,22 @@ public class ActionMutableTreeNode extends DefaultMutableTreeNode {
 		return this.type;
 	}
 	
+	/**
+	 * Is this reference removed?
+	 * @return true if removed
+	 */
+	public boolean isRemoved() {
+		return removed;
+	}
+
+	/**
+	 * Set whether this reference was removed
+	 * @param removed true if removed
+	 */
+	public void setRemoved(boolean removed) {
+		this.removed = removed;
+	}
+
 	@Override
 	public String toString() {
 		switch(type) {

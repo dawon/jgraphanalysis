@@ -25,9 +25,9 @@ public class PrecedenceGraphCreator<I, D> {
 	/**
 	 * Exactly represents {@link Action} Reference
 	 * @author Jakub Zacek
-	 * @version 1.0
+	 * @version 1.1
 	 */
-	public class ReferenceIdentificator {
+	public static class ReferenceIdentificator<I> {
 		/**
 		 * first vertex
 		 */		
@@ -75,6 +75,30 @@ public class PrecedenceGraphCreator<I, D> {
 		public String toString() {
 			return Action.REFERENCES_NAMES[type] + ": " + from.toString() + " -> " + to.toString();
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((from == null) ? 0 : from.hashCode());
+			result = prime * result + ((to == null) ? 0 : to.hashCode());
+			result = prime * result + type;
+			return result;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			ReferenceIdentificator<I> other = (ReferenceIdentificator<I>) obj;
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+			return this.type == other.getType() && this.from.equals(other.getFrom()) && this.to.equals(other.getTo());
+		}
+		
 	}
 	
 	
@@ -339,12 +363,12 @@ public class PrecedenceGraphCreator<I, D> {
 	 * @param completedVertices completed vertices
 	 * @param badReferences found bad references (cycles)
 	 */
-    private void findCycles(IGraphConnector<I> graph, I edge, I vertex, Set<I> visitedVertices, Set<I> completedVertices, List<ReferenceIdentificator> badReferences) {    	
+    private void findCycles(IGraphConnector<I> graph, I edge, I vertex, Set<I> visitedVertices, Set<I> completedVertices, List<ReferenceIdentificator<I>> badReferences) {    	
         if (edge != null && visitedVertices.contains(vertex)) {
             if (completedVertices.contains(vertex)) {
             	return;
             }
-            badReferences.add(new ReferenceIdentificator((int)graph.getEdgeData(edge, "type"), graph.getEdgeFrom(edge), graph.getEdgeTo(edge)));
+            badReferences.add(new ReferenceIdentificator<I>((int)graph.getEdgeData(edge, "type"), graph.getEdgeFrom(edge), graph.getEdgeTo(edge)));
             return;
         }
 
@@ -364,10 +388,10 @@ public class PrecedenceGraphCreator<I, D> {
      * @return {@link List} of problematic references ({@link ReferenceIdentificator})
      * @throws NoSuchElementException when connection to {@link Action} does not exist
      */
-    public List<ReferenceIdentificator> findAndFixCycles(IGraphConnector<I> graph, boolean fix) throws NoSuchElementException {
+    public List<ReferenceIdentificator<I>> findAndFixCycles(IGraphConnector<I> graph, boolean fix) throws NoSuchElementException {
         Set<I> visitedVertices = new HashSet<I>();
         Set<I> completedVertices = new HashSet<I>();
-    	List<ReferenceIdentificator> refs = new ArrayList<ReferenceIdentificator>();
+    	List<ReferenceIdentificator<I>> refs = new ArrayList<ReferenceIdentificator<I>>();
     	
     	prepare(false);
     	
@@ -378,8 +402,8 @@ public class PrecedenceGraphCreator<I, D> {
 		}
     	
     	if (fix) {
-    		for (Iterator<ReferenceIdentificator> iterator = refs.iterator(); iterator.hasNext();) {
-    			ReferenceIdentificator id = iterator.next();
+    		for (Iterator<ReferenceIdentificator<I>> iterator = refs.iterator(); iterator.hasNext();) {
+    			ReferenceIdentificator<I> id = iterator.next();
 				if (id.getType() < 2) {
 					actions.get(id.getTo()).getRawReferences().get(id.getType()).remove(id.getFrom());
 				} else {

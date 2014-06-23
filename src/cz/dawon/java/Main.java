@@ -8,9 +8,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.InvalidAlgorithmParameterException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -33,13 +35,14 @@ import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetupListener;
 import cz.dawon.java.library.Action;
 import cz.dawon.java.library.JGraphAnalysis;
 import cz.dawon.java.library.PrecedenceGraphCreator;
+import cz.dawon.java.library.PrecedenceGraphCreator.ReferenceIdentificator;
 import cz.dawon.java.library.graphConnectors.GraphStreamConnector;
 import cz.dawon.java.library.graphConnectors.IGraphClickListener;
 
 /**
  * Main example class
  * @author Jakub Zacek
- * @version 1.6.1
+ * @version 1.7
  */
 public class Main extends JFrame {
 
@@ -76,6 +79,11 @@ public class Main extends JFrame {
 	 * {@link JGraphAnalysis} instance
 	 */
 	private JGraphAnalysis<String, String> jga;
+	
+	/**
+	 * original {@link Set} of {@link Action}s
+	 */
+	private Set<Action<String, String>> actions = new HashSet<Action<String, String>>();
 
 	/**
 	 * Constructor
@@ -198,16 +206,18 @@ public class Main extends JFrame {
 
 			GraphStreamConnector gr = new GraphStreamConnector();
 			gr.createGraph("");
-			List<PrecedenceGraphCreator<String, String>.ReferenceIdentificator> refs = pgc.findAndFixCycles(gr, true);
+			List<ReferenceIdentificator<String>> refs = pgc.findAndFixCycles(gr, true);
 
 			if (!refs.isEmpty()) {
 				String res = "Some Refereces would cause troubles (cycles) so I fixed (removed) them:\n";
-				for (Iterator<PrecedenceGraphCreator<String, String>.ReferenceIdentificator> iterator = refs.iterator(); iterator.hasNext();) {
+				for (Iterator<ReferenceIdentificator<String>> iterator = refs.iterator(); iterator.hasNext();) {
 					res += iterator.next().toString() + "\n";
 				}
 				JOptionPane.showMessageDialog(this, res, "Warning", JOptionPane.WARNING_MESSAGE);
 			}
-
+		
+			updateJTree(refs);
+			
 			jga.process(pgc);
 			toolbarTB.getComponent(1).setEnabled(false);
 		} catch (InvalidAlgorithmParameterException | NoSuchElementException e) {
@@ -250,14 +260,17 @@ public class Main extends JFrame {
 
 	/**
 	 * Updates {@link JTree}
+	 * @param refs {@link List} of {@link ReferenceIdentificator}s
 	 */
-	private void updateJTree() {
+	private void updateJTree(List<ReferenceIdentificator<String>> refs) {
 		ActionMutableTreeNode root = (ActionMutableTreeNode)model.getRoot();
-		ActionMutableTreeNode ac, ref;
+		ActionMutableTreeNode ac, ref, rf;
+		ReferenceIdentificator<String> refid;
+		String action1;
 		root.removeAllChildren();
 
-		for (Iterator<String> iterator = jga.getActions().keySet().iterator(); iterator.hasNext();) {
-			Action<String, String> action = jga.getAction(iterator.next());
+		for (Iterator<Action<String, String>> iterator = actions.iterator(); iterator.hasNext();) {
+			Action<String, String> action = iterator.next();
 			ac = new ActionMutableTreeNode(1, action.getId());
 			root.add(ac);
 
@@ -265,7 +278,16 @@ public class Main extends JFrame {
 				if (!action.getRawReferences().get(i).isEmpty()) {
 					ref = new ActionMutableTreeNode(i+2);
 					for (Iterator<String> iterator2 = action.getRawReferences().get(i).iterator(); iterator2.hasNext();) {
-						ref.add(new ActionMutableTreeNode(6, iterator2.next()));
+						action1 = iterator2.next();
+						rf = new ActionMutableTreeNode(6, action1);
+						
+						refid = new ReferenceIdentificator<String>(i, i < 2 ? action1 : action.getId(), i < 2 ? action.getId() : action1);
+						
+						if (refs != null && refs.contains(refid)) {
+							rf.setRemoved(true);
+						}
+						
+						ref.add(rf);
 					}
 					ac.add(ref);
 				}
@@ -288,6 +310,11 @@ public class Main extends JFrame {
 		jga.getGraphConnector().createGraph("Test");
 		
 		jga.addVertices();
+		
+		for (Iterator<String> iterator = jga.getActions().keySet().iterator(); iterator.hasNext();) {
+			actions.add(jga.getAction(iterator.next()).copy());
+		}		
+		
 		toolbarTB.getComponent(1).setEnabled(true);
 
 		this.graphPN.removeAll();
@@ -303,8 +330,10 @@ public class Main extends JFrame {
 			}
 		});
 		
+		
+		
 
-		updateJTree();
+		updateJTree(null);
 
 		this.graphPN.getComponent(0).revalidate();
 		this.graphPN.getComponent(0).repaint();
