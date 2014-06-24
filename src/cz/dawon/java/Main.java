@@ -31,7 +31,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetup;
-import cz.dawon.java.gui.parserSetup.JGraphAnalysisSetupListener;
+import cz.dawon.java.gui.parserSetup.IJGraphAnalysisSetupListener;
 import cz.dawon.java.library.Action;
 import cz.dawon.java.library.JGraphAnalysis;
 import cz.dawon.java.library.PrecedenceGraphCreator;
@@ -42,7 +42,7 @@ import cz.dawon.java.library.graphConnectors.IGraphClickListener;
 /**
  * Main example class
  * @author Jakub Zacek
- * @version 1.7
+ * @version 1.7.1
  */
 public class Main extends JFrame {
 
@@ -239,7 +239,7 @@ public class Main extends JFrame {
 	 */
 	private void start() {
 		JGraphAnalysisSetup setup = new JGraphAnalysisSetup(this);
-		setup.addJGraphAnalysisSetupListener(new JGraphAnalysisSetupListener() {
+		setup.addJGraphAnalysisSetupListener(new IJGraphAnalysisSetupListener() {
 			@Override
 			public void setupDone(JGraphAnalysis<String, String> jga) {
 				onDone(jga);
@@ -329,9 +329,6 @@ public class Main extends JFrame {
 				detailsTA.setText(Main.this.jga.getAction(vertex).getData());				
 			}
 		});
-		
-		
-		
 
 		updateJTree(null);
 

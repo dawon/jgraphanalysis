@@ -11,14 +11,14 @@ import cz.dawon.java.library.JGraphAnalysis;
 /**
  * Shows GUI allowing user to setup JGraphAnalysis and XML parser and then returning a JGraphAnalysis instance
  * @author Jakub Zacek
- * @version 1.1
+ * @version 1.1.1
  */
 public class JGraphAnalysisSetup {
 
 	/**
 	 * List of listeners
 	 */
-	private List<JGraphAnalysisSetupListener> listeners;
+	private List<IJGraphAnalysisSetupListener> listeners;
 	
 	/**
 	 * parent {@link JFrame}
@@ -39,9 +39,9 @@ public class JGraphAnalysisSetup {
 	 * Adds new JGraphAnalysisSetupListener
 	 * @param listener listener
 	 */
-	public void addJGraphAnalysisSetupListener(JGraphAnalysisSetupListener listener) {
+	public void addJGraphAnalysisSetupListener(IJGraphAnalysisSetupListener listener) {
 		if (listeners == null) {
-			listeners = new ArrayList<JGraphAnalysisSetupListener>();
+			listeners = new ArrayList<IJGraphAnalysisSetupListener>();
 		}
 		listeners.add(listener);
 	}
@@ -60,7 +60,7 @@ public class JGraphAnalysisSetup {
 	 */
 	public void setUpDone(JGraphAnalysis<String, String> jga) {
 		if (listeners != null) {
-			for (Iterator<JGraphAnalysisSetupListener> iterator = listeners.iterator(); iterator.hasNext();) {
+			for (Iterator<IJGraphAnalysisSetupListener> iterator = listeners.iterator(); iterator.hasNext();) {
 				iterator.next().setupDone(jga);
 			}
 		}

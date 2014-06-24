@@ -7,9 +7,9 @@ import cz.dawon.java.library.JGraphAnalysis;
 /**
  * Listener for JGraphAnalysis Setup
  * @author Jakub Zacek
- * @version 1.0
+ * @version 1.0.1
  */
-public interface JGraphAnalysisSetupListener extends EventListener {
+public interface IJGraphAnalysisSetupListener extends EventListener {
 
 	/**
 	 * Called when JGraphAnalysis is set up
