@@ -260,7 +260,7 @@ public class XMLParser implements IFileParser<String, String> {
 	 * @param node source Node
 	 * @param sel Node Selector
 	 * @param skip How many times skip desired node data. When less than 1, first occurance is taken. 1 - second occurance is taken. 2 third etc.
-	 * @return
+	 * @return Node data
 	 */
 	public static String getNodeData(Node node, NodeSelector sel, int skip) {
 		if (sel == null) {

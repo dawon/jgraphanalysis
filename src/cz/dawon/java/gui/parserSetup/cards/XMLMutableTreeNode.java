@@ -43,7 +43,7 @@ public class XMLMutableTreeNode extends DefaultMutableTreeNode {
 
 	/**
 	 * constructor
-	 * @param node user defined Object
+	 * @param obj user defined Object
 	 */
 	public XMLMutableTreeNode(Object obj) {
 		super(obj, true);

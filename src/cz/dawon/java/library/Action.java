@@ -137,7 +137,7 @@ public class Action<I, D> {
 
 	/**
 	 * Removes a follower
-	 * @param p follower identifier
+	 * @param f follower identifier
 	 */
 	public void removeFollower(I f) {
 		this.references.get(2).remove(f);
@@ -154,7 +154,7 @@ public class Action<I, D> {
 
 	/**
 	 * Adds a tight follower
-	 * @param p tight follower identifier
+	 * @param f tight follower identifier
 	 */
 	public void addTightFollower(I f) {
 		this.references.get(3).add(f);
@@ -162,7 +162,7 @@ public class Action<I, D> {
 
 	/**
 	 * Removes a tight follower
-	 * @param p tight follower identifier
+	 * @param f tight follower identifier
 	 */
 	public void removeTightFollower(I f) {
 		this.references.get(3).remove(f);
