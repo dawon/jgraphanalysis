@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<actions>
+  <action id="A">
+    <data>Koupit brambory</data>
+  </action>
+
+  <action id="B">
+    <data>Koupit sůl</data>
+  </action>
+  
+  <action id="C">
+    <data>Koupit kmín</data>
+  </action>  
+  
+  <action id="D">
+    <data>Oloupat brambory</data>
+    <pre>A</pre>
+  </action>  
+
+  <action id="E">
+    <data>Nakrájet brambory</data>
+    <tpre>D</tpre>
+  </action>  
+  
+  <action id="F">
+    <data>Napustit vodu do hrnce</data>
+  </action>    
+  
+  <action id="G">
+    <data>Dát brambory do hrnce</data>
+    <pre>E</pre>
+    <pre>F</pre>
+  </action>    
+  
+  <action id="H">
+    <data>Osolit vodu v hrnci</data>
+    <tpre>F</tpre>
+    <pre>B</pre>
+  </action>    
+  
+  <action id="I">
+    <data>Přidat kmín do hrnce</data>
+    <tpre>F</tpre>
+    <pre>C</pre>
+  </action>    
+  
+  <action id="J">
+    <data>Pustit vařič</data>
+    <pre>H</pre>
+    <pre>G</pre>
+    <pre>I</pre>    
+  </action>    
+  
+  <action id="K">
+    <data>Slít vodu</data>
+    <tpre>L</tpre>
+  </action>    
+
+  <action id="L">
+    <data>Počkat až se brambory uvaří</data>
+    <tpre>J</tpre>
+  </action>   
+
+</actions>
+  

@@ -124,7 +124,8 @@ public class Main extends JFrame {
 		mainPN.add(graphPN, BorderLayout.CENTER);
 
 		detailsTA = new JTextArea();
-		detailsTA.setFont(new Font(detailsTA.getFont().getFamily(), Font.PLAIN, 25));
+		detailsTA.setFont(new Font(detailsTA.getFont().getFamily(), Font.PLAIN, 20));
+		detailsTA.setLineWrap(true);
 		detailsTA.setPreferredSize(new Dimension(200, 570));
 		detailsTA.setEditable(false);
 		mainPN.add(detailsTA, BorderLayout.EAST);
